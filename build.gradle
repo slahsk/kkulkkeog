@@ -1,0 +1,45 @@
+buildscript {
+    ext {
+        springBootVersion = '2.6.0'
+        mapstruct = '1.4.2.Final'
+        lombokMapstructBinding = '0.2.0'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE"
+    }
+}
+
+allprojects {
+    group = 'org.slahsk'
+}
+
+subprojects {
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    sourceCompatibility = '11'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+
+        implementation "org.mapstruct:mapstruct:${mapstruct}"
+        implementation "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBinding}"
+
+        annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct}"
+        annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBinding}"
+    }
+
+
+}
+
