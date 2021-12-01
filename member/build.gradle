@@ -2,8 +2,8 @@
 
 compileJava {
     options.compilerArgs += [
-            '-Amapstruct.defaultComponentModel=string',
-    ]
+            '-Amapstruct.defaultComponentModel=spring',
+            '-Amapstruct.unmappedTargetPolicy=IGNORE'    ]
 }
 
 dependencies {
@@ -21,6 +21,8 @@ dependencies {
 
     annotationProcessor 'org.mapstruct:mapstruct-processor'
     annotationProcessor 'org.projectlombok:lombok-mapstruct-binding'
+
+    implementation project(":member-api")
 }
 
 test {
