@@ -1,4 +1,5 @@
 rootProject.name = 'kkulkkeog'
 include 'member'
 include 'member-api'
+include 'shop'
 
