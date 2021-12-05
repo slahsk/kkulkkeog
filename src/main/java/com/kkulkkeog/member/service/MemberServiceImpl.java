@@ -1,8 +1,8 @@
 package com.kkulkkeog.member.service;
 
-import com.kkulkkeog.member.common.exception.MemberNotFindException;
 import com.kkulkkeog.member.domain.Member;
 import com.kkulkkeog.member.repository.MemberRepository;
+import com.kkulkkeog.member.common.exception.MemberNotFindException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

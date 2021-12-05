@@ -1,5 +1,6 @@
 package com.kkulkkeog.shop.domain;
 
+import com.kkulkkeog.menu.domain.MenuGroup;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,8 +29,5 @@ public class Shop {
     private LocalDateTime openTime;
 
     private LocalDateTime closeTime;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "shop")
-    private List<MenuGroup> menuGroups;
 
 }

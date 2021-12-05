@@ -1,19 +1,19 @@
 package com.kkulkkeog.member.web;
 
 
+import com.kkulkkeog.common.Constant;
 import com.kkulkkeog.member.api.web.GetMemberResponse;
 import com.kkulkkeog.member.api.web.PostMemberRequest;
 import com.kkulkkeog.member.api.web.PostMemberResponse;
 import com.kkulkkeog.member.domain.Member;
 import com.kkulkkeog.member.domain.mapper.MemberMapper;
-import lombok.AllArgsConstructor;
 import com.kkulkkeog.member.service.MemberService;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import reactor.netty.http.server.HttpServerResponse;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping(Constant.API_VERSION)
 public class MemberController {
     private MemberService memberService;
 

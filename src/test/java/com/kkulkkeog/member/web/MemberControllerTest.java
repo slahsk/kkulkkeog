@@ -1,8 +1,8 @@
 package com.kkulkkeog.member.web;
 
-import com.kkulkkeog.member.api.web.PostMemberRequest;
 import com.kkulkkeog.member.domain.Member;
 import com.kkulkkeog.member.repository.MemberRepository;
+import com.kkulkkeog.member.api.web.PostMemberRequest;
 import com.kkulkkeog.member.service.MemberServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
