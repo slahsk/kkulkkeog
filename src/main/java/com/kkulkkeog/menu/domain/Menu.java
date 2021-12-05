@@ -34,7 +34,7 @@ public class Menu {
     @JoinColumn(name = "menu_group_no")
     private MenuGroup menuGroup;
 
-    private long imageNo;
+    private long fileNo;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "menu")
     private List<MenuOption> menuOptions;

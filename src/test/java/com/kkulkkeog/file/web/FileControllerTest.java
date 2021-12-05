@@ -7,6 +7,7 @@ import com.kkulkkeog.file.repository.FileRepository;
 import com.kkulkkeog.file.service.FileServiceImpl;
 import com.kkulkkeog.file.service.SimpleFileSave;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -48,8 +49,8 @@ public class FileControllerTest {
         }
     }
 
-
     @Test
+    @DisplayName("단건 파일 저장")
     void testPostFile(){
         ClassPathResource classPathResource = new ClassPathResource("images/포대자루.jpeg");
         log.info("classPathResource path: {}", classPathResource.getPath());

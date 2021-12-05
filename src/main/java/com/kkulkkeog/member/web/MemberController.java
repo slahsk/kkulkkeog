@@ -2,38 +2,45 @@ package com.kkulkkeog.member.web;
 
 
 import com.kkulkkeog.common.Constant;
-import com.kkulkkeog.member.api.web.GetMemberResponse;
-import com.kkulkkeog.member.api.web.PostMemberRequest;
-import com.kkulkkeog.member.api.web.PostMemberResponse;
+import com.kkulkkeog.member.api.web.*;
 import com.kkulkkeog.member.domain.Member;
 import com.kkulkkeog.member.domain.mapper.MemberMapper;
 import com.kkulkkeog.member.service.MemberService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping(Constant.API_VERSION)
 public class MemberController {
-    private MemberService memberService;
+    private final MemberService memberService;
 
     @PostMapping("/members")
-    public PostMemberResponse postMember(PostMemberRequest request){
-        Member member = memberService.saveMember(MemberMapper.INSTANCE.toMember(request));
+    public Mono<PostMemberResponse> postMember(@RequestBody PostMemberRequest request){
+        Mono<Member> memberMono = memberService.saveMember(MemberMapper.INSTANCE.toMember(request));
 
-        return MemberMapper.INSTANCE.toPostMemberResponse(member);
+        return memberMono.map(MemberMapper.INSTANCE::toPostMemberResponse);
     }
 
-    @GetMapping("/members/{no}")
-    public GetMemberResponse getMember(@PathVariable Long no){
-        Member member = memberService.findMember(no);
 
-        return MemberMapper.INSTANCE.toGetMemberResponse(member);
+    @PutMapping("/members/{memberNo}")
+    public Mono<PutMemberResponse> putMember(@PathVariable Long memberNo, @RequestBody PutMemberRequest request){
+        Mono<Member> memberMono = memberService.updateMember(MemberMapper.INSTANCE.toMember(memberNo, request));
+
+        return memberMono.map(MemberMapper.INSTANCE::toPutMemberResponse);
     }
 
-    @DeleteMapping("/members/{no}")
-    public void deleteMember(@PathVariable Long no){
-        memberService.deleteMember(no);
+    @GetMapping("/members/{memberNo}")
+    public Mono<GetMemberResponse> getMember(@PathVariable Long memberNo){
+        Mono<Member> member = memberService.findMember(memberNo);
 
+        return member.map(MemberMapper.INSTANCE::toGetMemberResponse);
+    }
+
+    @DeleteMapping("/members/{memberNo}")
+    public Mono<Void> deleteMember(@PathVariable Long memberNo){
+        return memberService.deleteMember(memberNo);
     }
 }

@@ -5,6 +5,7 @@ import com.kkulkkeog.member.repository.MemberRepository;
 import com.kkulkkeog.member.common.exception.MemberNotFindException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -17,32 +18,35 @@ public class MemberServiceImpl implements MemberService{
 
 
     @Override
-    public Member saveMember(Member member) {
-        return memberRepository.save(member);
+    public Mono<Member> saveMember(Member member) {
+        Member data = memberRepository.save(member);
+
+        return Mono.just(data);
     }
 
     @Override
-    public Member updateMember(Member member) {
-        return memberRepository.save(member);
+    public Mono<Member> updateMember(Member member) {
+        Member data = memberRepository.save(member);
+
+        return Mono.just(data);
     }
 
     @Override
-    public void deleteMember(Long no) {
-        Member member = findMember(no);
-        member.delete();
+    public Mono<Void> deleteMember(Long no) {
 
-        memberRepository.save(member);
+        return findMember(no)
+        .flatMap( member -> {
+            member.delete();
+
+            return Mono.empty();
+        }).then();
     }
 
     @Override
-    public Member findMember(Long no) {
+    public Mono<Member> findMember(Long no) {
         Optional<Member> member = memberRepository.findById(no);
 
-        if(member.isEmpty()){
-            throw new MemberNotFindException(no);
-        }
-
-        return member.get();
+        return Mono.just(member.orElseThrow(() -> new MemberNotFindException(no)));
     }
 
 

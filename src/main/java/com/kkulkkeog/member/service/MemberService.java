@@ -1,13 +1,14 @@
 package com.kkulkkeog.member.service;
 
 import com.kkulkkeog.member.domain.Member;
+import reactor.core.publisher.Mono;
 
 public interface MemberService {
-    Member saveMember(Member member);
+    Mono<Member> saveMember(Member member);
 
-    Member updateMember(Member member);
+    Mono<Member> updateMember(Member member);
 
-    void deleteMember(Long no);
+    Mono<Void> deleteMember(Long no);
 
-    Member findMember(Long no);
+    Mono<Member> findMember(Long no);
 }

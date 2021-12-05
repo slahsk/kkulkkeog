@@ -5,6 +5,7 @@ import com.kkulkkeog.member.repository.MemberRepository;
 import com.kkulkkeog.member.api.web.PostMemberRequest;
 import com.kkulkkeog.member.service.MemberServiceImpl;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -33,10 +34,15 @@ public class MemberControllerTest {
 
 
     @Test
+    @DisplayName("사용자 저장")
     void testPost(){
         PostMemberRequest request = PostMemberRequest.builder()
                         .id("khj").name("홍길동").email("test@mail.com").password("11111")
                         .build();
+
+        Member member = Member.builder().no(1L).password("11111").email("test@mail.com").name("홍길동").build();
+
+        Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenReturn(member);
 
         webClient.post()
                 .uri("/api/v1/members")
@@ -49,9 +55,11 @@ public class MemberControllerTest {
     }
 
     @Test
+    @DisplayName("사용자 탈퇴")
     void testDelete(){
         Member member = Member.builder().id("khj").deleted(false).email("test@mail.com").password("11111")
                         .name("홍길동").build();
+
 
         Mockito.when(memberRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(member));
 
@@ -60,13 +68,6 @@ public class MemberControllerTest {
                 .uri("/api/v1/members/1")
                 .exchange()
                 .expectStatus().isOk();
-
-        ArgumentCaptor<Member> captor = ArgumentCaptor.forClass(Member.class);
-        Mockito.verify(memberRepository).save(captor.capture());
-
-        Member value = captor.getValue();
-
-        Assertions.assertTrue(value.getDeleted());
     }
 
 

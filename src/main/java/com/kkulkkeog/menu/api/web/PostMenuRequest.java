@@ -1,8 +1,13 @@
 package com.kkulkkeog.menu.api.web;
 
 
+import lombok.Builder;
+import lombok.Getter;
+
 import java.util.List;
 
+@Getter
+@Builder
 public class PostMenuRequest {
 
     private String name;
@@ -13,7 +18,8 @@ public class PostMenuRequest {
 
     private List<Menu> menus;
 
-
+    @Getter
+    @Builder
     public static class Menu{
         private String name;
 
@@ -23,9 +29,13 @@ public class PostMenuRequest {
 
         private int menuOrder;
 
+        private long fileNo;
+
         private List<MenuOption> menuOptions;
     }
 
+    @Getter
+    @Builder
     public static class MenuOption{
         private String name;
 
@@ -34,6 +44,8 @@ public class PostMenuRequest {
         private List<MenuOptionDetail> menuOptionDetails;
     }
 
+    @Getter
+    @Builder
     public static class MenuOptionDetail{
 
         private String name;

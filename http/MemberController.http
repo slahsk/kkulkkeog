@@ -1,0 +1,27 @@
+POST http://localhost:8080/api/v1/members
+Content-Type: application/json
+
+{
+  "email": "test@email.com",
+  "id": "test",
+  "password": "test",
+  "name": "홍길동"
+}
+
+###
+GET http://localhost:8080/api/v1/members/1
+
+
+###
+PUT http://localhost:8080/api/v1/members/1
+Content-Type: application/json
+
+{
+  "email": "test@email.com",
+  "password": "test",
+  "name": "홍길동"
+}
+
+
+###
+DELETE http://localhost:8080/api/v1/members/1
