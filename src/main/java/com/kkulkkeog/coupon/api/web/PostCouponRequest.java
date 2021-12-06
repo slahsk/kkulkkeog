@@ -1,13 +1,12 @@
 package com.kkulkkeog.coupon.api.web;
 
+import java.time.LocalDateTime;
+
 import com.kkulkkeog.coupon.domain.CouponIssuance;
 import com.kkulkkeog.coupon.domain.CouponType;
+
 import lombok.Builder;
 import lombok.Getter;
-
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import java.time.LocalDateTime;
 
 @Getter
 @Builder

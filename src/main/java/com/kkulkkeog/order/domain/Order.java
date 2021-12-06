@@ -3,6 +3,10 @@ package com.kkulkkeog.order.domain;
 import lombok.*;
 
 import javax.persistence.*;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
+@EntityListeners(AuditingEntityListener.class)
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order")
@@ -34,7 +39,7 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
 
-
+    @CreatedDate
     private LocalDateTime created;
 
 }

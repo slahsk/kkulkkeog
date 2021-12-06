@@ -2,7 +2,9 @@ package com.kkulkkeog.member.service;
 
 import com.kkulkkeog.member.domain.Member;
 import com.kkulkkeog.member.repository.MemberRepository;
+import com.kkulkkeog.member.common.exception.MemberIdDuplicateException;
 import com.kkulkkeog.member.common.exception.MemberNotFindException;
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -19,9 +21,15 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public Mono<Member> saveMember(Member member) {
-        Member data = memberRepository.save(member);
-
-        return Mono.just(data);
+        return Mono.just(member)
+        .map( m -> {
+            if(memberRepository.findByMemberId(member.getMemberId()).isPresent()){
+                Mono.error(new MemberIdDuplicateException(member.getMemberId()));
+            }
+            
+            Member data = memberRepository.save(member);
+            return data;
+        });
     }
 
     @Override

@@ -57,7 +57,7 @@ public class MemberControllerTest {
     @Test
     @DisplayName("사용자 탈퇴")
     void testDelete(){
-        Member member = Member.builder().id("khj").deleted(false).email("test@mail.com").password("11111")
+        Member member = Member.builder().memberId("khj").deleted(false).email("test@mail.com").password("11111")
                         .name("홍길동").build();
 
 

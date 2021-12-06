@@ -3,6 +3,10 @@ package com.kkulkkeog.member.domain;
 import lombok.*;
 
 import javax.persistence.*;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
+@EntityListeners(AuditingEntityListener.class)
 public class Member {
 
     @Id
@@ -22,7 +27,7 @@ public class Member {
 
     private String email;
 
-    private String id;
+    private String memberId;
 
     private String password;
 
@@ -30,6 +35,7 @@ public class Member {
 
     private Boolean deleted;
 
+    @CreatedDate
     private LocalDateTime created;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")

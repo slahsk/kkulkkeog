@@ -3,8 +3,13 @@ package com.kkulkkeog.coupon.api.web;
 import com.kkulkkeog.coupon.domain.CouponIssuance;
 import com.kkulkkeog.coupon.domain.CouponType;
 
+import lombok.Builder;
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Builder
+@Getter
 public class PutCouponResponse {
     private Long no;
 

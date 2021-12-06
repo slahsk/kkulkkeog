@@ -1,10 +1,15 @@
 package com.kkulkkeog.coupon.api.web;
 
+import java.time.LocalDateTime;
+
 import com.kkulkkeog.coupon.domain.CouponIssuance;
 import com.kkulkkeog.coupon.domain.CouponType;
 
-import java.time.LocalDateTime;
+import lombok.Builder;
+import lombok.Getter;
 
+@Getter
+@Builder
 public class PutCouponRequest {
     private String title;
 

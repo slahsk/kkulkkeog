@@ -2,18 +2,30 @@ package com.kkulkkeog.member.web;
 
 
 import com.kkulkkeog.common.Constant;
-import com.kkulkkeog.member.api.web.*;
+import com.kkulkkeog.member.api.web.GetMemberResponse;
+import com.kkulkkeog.member.api.web.PostMemberRequest;
+import com.kkulkkeog.member.api.web.PostMemberResponse;
+import com.kkulkkeog.member.api.web.PutMemberRequest;
+import com.kkulkkeog.member.api.web.PutMemberResponse;
 import com.kkulkkeog.member.domain.Member;
 import com.kkulkkeog.member.domain.mapper.MemberMapper;
 import com.kkulkkeog.member.service.MemberService;
-import lombok.AllArgsConstructor;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping(Constant.API_VERSION)
+@RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
 

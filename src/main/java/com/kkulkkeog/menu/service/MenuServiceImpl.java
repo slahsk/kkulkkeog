@@ -1,5 +1,8 @@
 package com.kkulkkeog.menu.service;
 
+import java.util.List;
+
+import com.kkulkkeog.menu.api.message.MenuValidation;
 import com.kkulkkeog.menu.domain.MenuGroup;
 import com.kkulkkeog.menu.repository.MenuGroupRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +24,17 @@ public class MenuServiceImpl implements MenuService{
 
         return Mono.just(data);
 
+    }
+
+    // 메뉴 유효성 검사
+    @Override
+    public void validation(List<MenuValidation> menuValidations) {
+
+        menuValidations.stream().forEach( menu -> {
+
+
+        });
+
+        
     }
 }
