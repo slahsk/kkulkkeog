@@ -16,9 +16,9 @@ import java.util.List;
 public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "menu")
-    private Long no;
+    private Long menuNo;
 
-    private String name;
+    private String menuName;
 
     private int price;
 

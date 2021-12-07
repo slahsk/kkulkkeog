@@ -20,8 +20,10 @@ public class MunuController {
     private final MenuService menuService;
 
     @PostMapping("/menus")
-    public void postMenu(@RequestBody PostMenuRequest postMenuRequest){
-        Mono<MenuGroup> menuGroupMono = menuService.saveMenu(MenuMapper.INSTANCE.toMenuGroup(postMenuRequest));
+    public void postMenu(@RequestBody Mono<PostMenuRequest> postMenuRequest){
+        Mono<MenuGroup> menuGroupMono = postMenuRequest.map(MenuMapper.INSTANCE::toMenuGroup);
+
+        Mono<MenuGroup> result = menuService.saveMenu(menuGroupMono);
 
 
     }

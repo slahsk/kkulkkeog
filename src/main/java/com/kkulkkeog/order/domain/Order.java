@@ -1,5 +1,6 @@
 package com.kkulkkeog.order.domain;
 
+import com.kkulkkeog.order.api.message.PaymentType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,7 +23,7 @@ import java.util.List;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order")
-    private Long no;
+    private Long orderNo;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private List<OrderMenu> orderMenus;
@@ -32,7 +33,11 @@ public class Order {
 
     private long totalPrice;
 
+    private long resultPrice;
+
     private long memberCouponNo;
+
+    private long memberNo;
 
     private long couponNo;
 

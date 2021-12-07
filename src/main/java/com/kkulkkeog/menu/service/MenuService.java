@@ -7,7 +7,7 @@ import com.kkulkkeog.menu.domain.MenuGroup;
 import reactor.core.publisher.Mono;
 
 public interface MenuService {
-    Mono<MenuGroup> saveMenu(MenuGroup menuGroup);
+    Mono<MenuGroup> saveMenu(Mono<MenuGroup> menuGroup);
 
-    void validation(List<MenuValidation> menuValidations);
+    Mono<Boolean> validation(List<MenuValidation> menuValidations);
 }

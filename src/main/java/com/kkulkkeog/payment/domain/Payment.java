@@ -25,7 +25,7 @@ public interface Payment {
 
                 break;
             default:
-                throw new PaymentNotExistException(order.getNo());
+                throw new PaymentNotExistException(order.getOrderNo());
         }
         
 

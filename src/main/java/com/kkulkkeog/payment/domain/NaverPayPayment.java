@@ -1,5 +1,4 @@
-package com.kkulkkeog.order.service.payment;
-
+package com.kkulkkeog.payment.domain;
 public class NaverPayPayment implements Payment{
 
     @Override

@@ -1,6 +1,8 @@
-package com.kkulkkeog.order.service.payment;
+package com.kkulkkeog.payment.domain;
 
-public class CashPayment implements Payment{
+import com.kkulkkeog.payment.domain.Payment;
+
+public class CashPayment implements Payment {
 
     @Override
     public boolean payment() {

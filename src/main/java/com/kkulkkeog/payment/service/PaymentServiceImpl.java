@@ -1,23 +1,20 @@
 package com.kkulkkeog.payment.service;
 
-import com.kkulkkeog.order.domain.Order;
-import com.kkulkkeog.payment.domain.Payment;
-
-import org.springframework.stereotype.Service;
-
+import com.kkulkkeog.payment.api.message.OrderPayment;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService{
     
-    
+
+
     @Override
-    public boolean payment(Order order) {
-        Payment payment = Payment.factory(order);
+    public Mono<Boolean> payment(Mono<OrderPayment> orderPaymentMono) {
+//        Payment payment = Payment.factory(order);
 
-
-        return true;
+        return null;
     }
-    
 }
