@@ -33,7 +33,7 @@ public class OrderServiceImpl implements OrderService{
 
         List<MenuValidation> menuValidations = OrderMapper.INSTANCE.toMenuValidations(order.getOrderMenus());
 
-       return  menuService.validation(menuValidations)
+       return  menuService.orderValidation(menuValidations)
         .flatMap( b -> {
             if(!b){
                 data.setOrderState(OrderState.MENU_VALIDATION_FAIL);
@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService{
 
             data.setOrderState(OrderState.MENU_VALIDATION_SUCCESS);
             List<CouponValidation> couponValidations = OrderMapper.INSTANCE.toCouponValidations(order.getOrderCoupons());
-            return couponService.validation(couponValidations);
+            return couponService.orderValidation(couponValidations);
         })
         .flatMap( b -> {
             if(!b){
@@ -54,14 +54,14 @@ public class OrderServiceImpl implements OrderService{
             OrderPayment orderPayment = OrderMapper.INSTANCE.toOrderPayment(data);
             return  paymentService.payment(orderPayment);
         })
-       .flatMap( b -> {
+       .map( b -> {
            if(!b){
                data.setOrderState(OrderState.PAYMENT_FAIL);
                Mono.error(new RuntimeException("payment"));
            }
 
            data.setOrderState(OrderState.SUCCESS);
-           return Mono.just(data);
+           return data;
        });
 
     }

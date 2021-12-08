@@ -20,6 +20,8 @@ public class Menu {
 
     private String menuName;
 
+    private long shopNo;
+
     private int price;
 
     private int salesRate;

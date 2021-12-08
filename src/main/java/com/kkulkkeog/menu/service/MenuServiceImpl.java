@@ -25,20 +25,18 @@ public class MenuServiceImpl implements MenuService{
 
     @Override
     public Mono<MenuGroup> saveMenu(Mono<MenuGroup> menuGroup) {
-        return  menuGroup.map(mg -> menuGroupRepository.save(mg));
+        return  menuGroup.map(menuGroupRepository::save);
     }
 
     @Override
-    public Mono<Boolean> validation(List<MenuValidation> menuValidations) {
+    public Mono<Boolean> orderValidation(List<MenuValidation> menuValidations) {
 
        return Flux.fromIterable(menuValidations)
         .flatMap(menuValidation -> {
-            Optional<Integer> count = menuRepository.countByMenuNameAndPrice(menuValidation.getMenuName(), menuValidation.getPrice());
-            return Mono.just(count.get());
+            Optional<Integer> count = menuRepository.countByShopNoAndMenuNoAndPrice(menuValidation.getShopNo(),menuValidation.getMenuNo(), menuValidation.getPrice());
+            return Mono.just(count.orElse(0));
         })
-        .as(integerFlux -> {
-            return integerFlux.filter(i -> i == 0).count().map(count -> count > 0 ? false : true );
-        });
+        .as(integerFlux -> integerFlux.reduce(0, (x1, x2) -> x1 + x2).map(i -> i == menuValidations.size()));
     }
 
 }

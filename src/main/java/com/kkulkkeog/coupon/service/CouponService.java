@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CouponService {
 
-    Mono<Boolean> validation(List<CouponValidation> couponValidations);
+    Mono<Boolean> orderValidation(List<CouponValidation> couponValidations);
 }

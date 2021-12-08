@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class CouponValidation {
-    private Long couponNo;
+    private long couponNo;
 
     private long memberNo;
 

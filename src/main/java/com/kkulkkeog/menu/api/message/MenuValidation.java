@@ -7,7 +7,9 @@ import lombok.Getter;
 @Builder
 public class MenuValidation {
 
-    private String menuName;
+    private long menuNo;
+
+    private long shopNo;
 
     private int price;
     
