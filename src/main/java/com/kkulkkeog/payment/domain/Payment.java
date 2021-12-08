@@ -2,30 +2,28 @@ package com.kkulkkeog.payment.domain;
 
 import com.kkulkkeog.order.common.exception.PaymentNotExistException;
 import com.kkulkkeog.order.domain.Order;
+import com.kkulkkeog.payment.api.message.OrderPayment;
 
 public interface Payment {
     boolean payment();
 
-    public static Payment factory(Order order){
+    public static Payment factory(OrderPayment orderPayment){
         Payment payment;
-        switch(order.getPaymentType()){
+        switch(orderPayment.getPaymentType()){
             case CARD:
-                payment = new CardPayment();
+                payment = new CardPayment(orderPayment);
                 break;
             case KAKAO_PAY:
-                payment = new KakaoPayPayment();
-
+                payment = new KakaoPayPayment(orderPayment);
                 break;
             case NAVER_PAY:
-                payment = new NaverPayPayment();
-
+                payment = new NaverPayPayment(orderPayment);
                 break;
             case CASH:
-                payment = new CashPayment();
-
+                payment = new CashPayment(orderPayment);
                 break;
             default:
-                throw new PaymentNotExistException(order.getOrderNo());
+                throw new PaymentNotExistException(orderPayment.getOrderNo());
         }
         
 

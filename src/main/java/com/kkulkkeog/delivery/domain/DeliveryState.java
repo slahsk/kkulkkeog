@@ -1,5 +1,5 @@
 package com.kkulkkeog.delivery.domain;
 
 public enum DeliveryState {
-    CREATE,IN_DELIVERY,CANCEL,SUCCESS,FAIL
+    BEFORE_DELIVERY,IN_DELIVERY,SUCCESS_DELIVERY,SUCCESS,FAIL,CANCEL
 }

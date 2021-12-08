@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class OrderCoupon {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderCoupon")
-    private Long couponNo;
+    private Long orderCouponNo;
 
     private long memberNo;
 

@@ -49,7 +49,9 @@ class MenuServiceImplTest {
 
         StepVerifier.create(menuService.orderValidation(menuValidations).log())
                 .expectNext(true)
-                .verifyComplete();
+                .expectComplete()
+                .log()
+                .verify();
     }
 
     @SuppressWarnings("unchecked")

@@ -4,6 +4,9 @@ import com.kkulkkeog.coupon.api.message.CouponValidation;
 import com.kkulkkeog.coupon.service.CouponService;
 import com.kkulkkeog.menu.api.message.MenuValidation;
 import com.kkulkkeog.menu.service.MenuService;
+import com.kkulkkeog.order.common.exception.CouponValidationException;
+import com.kkulkkeog.order.common.exception.MenuValidationException;
+import com.kkulkkeog.order.common.exception.PaymentFailException;
 import com.kkulkkeog.order.domain.Order;
 import com.kkulkkeog.order.domain.OrderState;
 import com.kkulkkeog.order.domain.mapper.OrderMapper;
@@ -37,7 +40,7 @@ public class OrderServiceImpl implements OrderService{
         .flatMap( b -> {
             if(!b){
                 data.setOrderState(OrderState.MENU_VALIDATION_FAIL);
-                Mono.error(new RuntimeException("menuValidation"));
+                Mono.error(new MenuValidationException(order.toString()));
             }
 
             data.setOrderState(OrderState.MENU_VALIDATION_SUCCESS);
@@ -47,7 +50,7 @@ public class OrderServiceImpl implements OrderService{
         .flatMap( b -> {
             if(!b){
                 data.setOrderState(OrderState.COUPON_VALIDATION_FAIL);
-                Mono.error(new RuntimeException("couponValidations"));
+                Mono.error(new CouponValidationException(order.toString()));
             }
 
             data.setOrderState(OrderState.COUPON_VALIDATION_SUCCESS);
@@ -57,10 +60,10 @@ public class OrderServiceImpl implements OrderService{
        .map( b -> {
            if(!b){
                data.setOrderState(OrderState.PAYMENT_FAIL);
-               Mono.error(new RuntimeException("payment"));
+               Mono.error(new PaymentFailException(order.toString()));
            }
 
-           data.setOrderState(OrderState.SUCCESS);
+           data.setOrderState(OrderState.ORDER_SUCCESS);
            return data;
        });
 

@@ -15,11 +15,16 @@ import javax.persistence.*;
 public class OrderMenu {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderMenu")
-    private Long no;
+    private Long orderMenuNo;
 
+    @Column(nullable = false)
     private long menuNo;
 
+    @Column(nullable = false)
     private long price;
+
+    @Column(nullable = false)
+    private int quantity;
 
     @ManyToOne
     @JoinColumn(name = "order_no")
