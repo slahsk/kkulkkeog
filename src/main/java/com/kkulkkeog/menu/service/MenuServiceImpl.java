@@ -37,7 +37,7 @@ public class MenuServiceImpl implements MenuService{
             return Mono.just(count.get());
         })
         .as(integerFlux -> {
-            return integerFlux.filter(integer -> integer == 0).count().map(count -> count > 0);
+            return integerFlux.filter(i -> i == 0).count().map(count -> count > 0 ? false : true );
         });
     }
 

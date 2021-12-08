@@ -12,7 +12,7 @@ public class PaymentServiceImpl implements PaymentService{
 
 
     @Override
-    public Mono<Boolean> payment(Mono<OrderPayment> orderPaymentMono) {
+    public Mono<Boolean> payment(OrderPayment orderPayment) {
 //        Payment payment = Payment.factory(order);
 
         return null;

@@ -5,21 +5,21 @@ import com.kkulkkeog.coupon.service.CouponService;
 import com.kkulkkeog.menu.api.message.MenuValidation;
 import com.kkulkkeog.menu.service.MenuService;
 import com.kkulkkeog.order.domain.Order;
+import com.kkulkkeog.order.domain.OrderState;
 import com.kkulkkeog.order.domain.mapper.OrderMapper;
 import com.kkulkkeog.order.repository.OrderRepository;
 import com.kkulkkeog.payment.api.message.OrderPayment;
 import com.kkulkkeog.payment.service.PaymentService;
-
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
-import reactor.core.publisher.Flux;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final PaymentService paymentService;
@@ -28,28 +28,42 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public Mono<Order> saveOrder(Order order) {
+
+        Order data = orderRepository.save(order);
+
         List<MenuValidation> menuValidations = OrderMapper.INSTANCE.toMenuValidations(order.getOrderMenus());
-        Mono<Boolean> menuValidation = menuService.validation(menuValidations);
 
-        List<CouponValidation> couponValidations = OrderMapper.INSTANCE.toCouponValidations(o.getOrderCoupons());
-        Mono<Boolean> couponVlidation = couponService.validation(couponValidations);
+       return  menuService.validation(menuValidations)
+        .flatMap( b -> {
+            if(!b){
+                data.setOrderState(OrderState.MENU_VALIDATION_FAIL);
+                Mono.error(new RuntimeException("menuValidation"));
+            }
 
-//        menuValidation
-//                .th
-//
-//        order.flatMap( o -> {
-//            Order data = orderRepository.save(o);
-//            OrderPayment orderPayment = OrderMapper.INSTANCE.toOrderPayment(data);
-//            paymentService.payment(Mono.just(orderPayment));
-//
-//        });
+            data.setOrderState(OrderState.MENU_VALIDATION_SUCCESS);
+            List<CouponValidation> couponValidations = OrderMapper.INSTANCE.toCouponValidations(order.getOrderCoupons());
+            return couponService.validation(couponValidations);
+        })
+        .flatMap( b -> {
+            if(!b){
+                data.setOrderState(OrderState.COUPON_VALIDATION_FAIL);
+                Mono.error(new RuntimeException("couponValidations"));
+            }
 
+            data.setOrderState(OrderState.COUPON_VALIDATION_SUCCESS);
+            OrderPayment orderPayment = OrderMapper.INSTANCE.toOrderPayment(data);
+            return  paymentService.payment(orderPayment);
+        })
+       .flatMap( b -> {
+           if(!b){
+               data.setOrderState(OrderState.PAYMENT_FAIL);
+               Mono.error(new RuntimeException("payment"));
+           }
 
-        //결재 진행
+           data.setOrderState(OrderState.SUCCESS);
+           return Mono.just(data);
+       });
 
-
-
-        return Mono.empty();
     }
 
     

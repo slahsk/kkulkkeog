@@ -42,6 +42,9 @@ public class Order {
     private long couponNo;
 
     @Enumerated(EnumType.STRING)
+    private OrderState orderState;
+
+    @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
 
     @CreatedDate
