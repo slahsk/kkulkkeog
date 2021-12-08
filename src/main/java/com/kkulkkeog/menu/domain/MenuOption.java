@@ -16,7 +16,7 @@ import java.util.List;
 public class MenuOption {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "menuOption")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqMenuOption")
     private Long no;
 
     private String name;

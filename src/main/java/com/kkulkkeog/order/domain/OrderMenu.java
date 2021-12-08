@@ -14,7 +14,7 @@ import javax.persistence.*;
 @ToString(exclude = {"order"})
 public class OrderMenu {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orderMenu")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqOrderMenu")
     private Long orderMenuNo;
 
     @Column(nullable = false)

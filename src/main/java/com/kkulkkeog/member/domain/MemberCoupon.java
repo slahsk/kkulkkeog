@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class MemberCoupon {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqAddress")
     private Long no;
 
     private long couponNo;

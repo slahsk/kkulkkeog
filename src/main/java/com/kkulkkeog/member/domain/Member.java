@@ -22,7 +22,7 @@ import java.util.List;
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqMember")
     private Long no;
 
     private String email;

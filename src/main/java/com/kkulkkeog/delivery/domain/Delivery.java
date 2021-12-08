@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @ToString
 public class Delivery {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "delivery")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqDelivery")
     private Long no;
 
     private String address;

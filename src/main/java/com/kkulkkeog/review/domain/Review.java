@@ -14,7 +14,7 @@ import javax.persistence.*;
 @ToString
 public class Review {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqReview")
     private Long no;
 
 }

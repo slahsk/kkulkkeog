@@ -25,7 +25,7 @@ import lombok.Setter;
 @Builder
 public class MenuGroup {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "menuGroup")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqMenuGroup")
     private Long no;
 
     private Long shopNo;
