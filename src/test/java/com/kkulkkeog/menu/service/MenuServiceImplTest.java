@@ -1,5 +1,6 @@
 package com.kkulkkeog.menu.service;
 
+import com.kkulkkeog.menu.api.exception.MenuValidationException;
 import com.kkulkkeog.menu.api.message.MenuValidation;
 import com.kkulkkeog.menu.repository.MenuGroupRepository;
 import com.kkulkkeog.menu.repository.MenuRepository;
@@ -34,7 +35,7 @@ class MenuServiceImplTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    @DisplayName("메뉴 검사 응답값:true (이름, 가격 검사)")
+    @DisplayName("메뉴 검사 응답값 성공")
     void testOrderValidationTrue(){
         MenuValidation menuValidation = MenuValidation.builder().menuNo(1).shopNo(100).price(2000).build();
         MenuValidation menuValidation2 = MenuValidation.builder().menuNo(2).shopNo(100).price(4000).build();
@@ -47,7 +48,7 @@ class MenuServiceImplTest {
 
 
 
-        StepVerifier.create(menuService.orderValidation(menuValidations).log())
+        StepVerifier.create(menuService.validationOrderMenu(menuValidations).log())
                 .expectNext(true)
                 .expectComplete()
                 .log()
@@ -56,8 +57,8 @@ class MenuServiceImplTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    @DisplayName("메뉴 검사 응답값:false (이름, 가격 검사)")
-    void testOrderValidationFalse(){
+    @DisplayName("메뉴 검사 응답값 실패(MenuValidationException)")
+    void testOrderValidationMenuValidationException(){
         MenuValidation menuValidation = MenuValidation.builder().menuNo(1).shopNo(100).price(2000).build();
         MenuValidation menuValidation2 = MenuValidation.builder().menuNo(2).shopNo(100).price(4000).build();
 
@@ -69,10 +70,8 @@ class MenuServiceImplTest {
 
 
 
-        StepVerifier.create(menuService.orderValidation(menuValidations))
-                .expectNext(false)
-                .expectComplete()
-                .log()
+        StepVerifier.create(menuService.validationOrderMenu(menuValidations))
+                .expectError(MenuValidationException.class)
                 .verify();
 
     }

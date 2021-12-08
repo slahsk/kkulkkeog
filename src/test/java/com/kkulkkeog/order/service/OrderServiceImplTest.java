@@ -1,6 +1,9 @@
 package com.kkulkkeog.order.service;
 
+import com.kkulkkeog.coupon.api.exception.CouponValidationException;
+import com.kkulkkeog.coupon.api.message.CouponCalculatePrice;
 import com.kkulkkeog.coupon.service.CouponService;
+import com.kkulkkeog.menu.api.exception.MenuValidationException;
 import com.kkulkkeog.menu.service.MenuService;
 import com.kkulkkeog.order.api.message.PaymentType;
 import com.kkulkkeog.order.domain.Order;
@@ -8,9 +11,9 @@ import com.kkulkkeog.order.domain.OrderCoupon;
 import com.kkulkkeog.order.domain.OrderMenu;
 import com.kkulkkeog.order.domain.OrderState;
 import com.kkulkkeog.order.repository.OrderRepository;
+import com.kkulkkeog.payment.api.exception.PaymentFailException;
 import com.kkulkkeog.payment.api.message.OrderPayment;
 import com.kkulkkeog.payment.service.PaymentService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class OrderServiceImplTest {
+class OrderServiceImplTest {
 
     @InjectMocks
     OrderServiceImpl orderService;
@@ -75,9 +78,10 @@ public class OrderServiceImplTest {
 
     @Test
     @DisplayName("주문 생성 - 성공")
-    void testSaveOrder(){
-        when(menuService.orderValidation(anyList())).thenReturn(Mono.just(true));
-        when(couponService.orderValidation(anyList())).thenReturn(Mono.just(true));
+    void testSaveOrderSuccess(){
+        when(menuService.validationOrderMenu(anyList())).thenReturn(Mono.just(true));
+        when(couponService.validationOrderCoupon(anyList())).thenReturn(Mono.just(true));
+        when(couponService.calculatePrice(any(CouponCalculatePrice.class))).thenReturn(Mono.just(2000L));
         when(paymentService.payment(any(OrderPayment.class))).thenReturn(Mono.just(true));
         when(orderRepository.save(any(Order.class))).thenReturn(order);
 
@@ -90,6 +94,56 @@ public class OrderServiceImplTest {
                 })
                 .expectComplete()
                 .verify();
+    }
+
+    @Test
+    @DisplayName("주문 생성 - 실패(MenuValidationException)")
+    void testSaveOrderMenuValidationException(){
+        when(menuService.validationOrderMenu(anyList())).thenReturn(Mono.error(new MenuValidationException("test")));
+        when(orderRepository.save(any(Order.class))).thenReturn(order);
+
+        Mono<Order> orderMono = orderService.saveOrder(order);
+
+        StepVerifier.create(orderMono)
+                .expectError(MenuValidationException.class)
+                .verify();
+
+        verify(orderRepository, times(2)).save(any(Order.class));
+    }
+
+    @Test
+    @DisplayName("주문 생성 - 실패(CouponValidationException)")
+    void testSaveOrderCouponValidationException(){
+        when(menuService.validationOrderMenu(anyList())).thenReturn(Mono.just(true));
+        when(couponService.validationOrderCoupon(anyList())).thenReturn(Mono.error(new CouponValidationException("test")));
+
+        when(orderRepository.save(any(Order.class))).thenReturn(order);
+
+        Mono<Order> orderMono = orderService.saveOrder(order);
+
+        StepVerifier.create(orderMono)
+                .expectError(CouponValidationException.class)
+                .verify();
+
+        verify(orderRepository, times(2)).save(any(Order.class));
+    }
+
+    @Test
+    @DisplayName("주문 생성 - 실패(PaymentFailException)")
+    void testSaveOrderPaymentFailException(){
+        when(menuService.validationOrderMenu(anyList())).thenReturn(Mono.just(true));
+        when(couponService.validationOrderCoupon(anyList())).thenReturn(Mono.just(true));
+        when(couponService.calculatePrice(any(CouponCalculatePrice.class))).thenReturn(Mono.just(2000L));
+        when(paymentService.payment(any(OrderPayment.class))).thenReturn(Mono.error(new PaymentFailException("test")));
+        when(orderRepository.save(any(Order.class))).thenReturn(order);
+
+        Mono<Order> orderMono = orderService.saveOrder(order);
+
+        StepVerifier.create(orderMono)
+                .expectError(PaymentFailException.class)
+                .verify();
+
+        verify(orderRepository, times(2)).save(any(Order.class));
     }
 
 

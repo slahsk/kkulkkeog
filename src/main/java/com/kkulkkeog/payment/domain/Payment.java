@@ -1,7 +1,6 @@
 package com.kkulkkeog.payment.domain;
 
-import com.kkulkkeog.order.common.exception.PaymentNotExistException;
-import com.kkulkkeog.order.domain.Order;
+import com.kkulkkeog.payment.api.exception.PaymentNotExistException;
 import com.kkulkkeog.payment.api.message.OrderPayment;
 
 public interface Payment {

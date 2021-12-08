@@ -27,7 +27,7 @@ import java.io.IOException;
 @WebFluxTest(controllers = { FileController.class })
 @Import({FileServiceImpl.class, SimpleFileSave.class})
 @Slf4j
-public class FileControllerTest {
+class FileControllerTest {
 
     @Autowired
     WebTestClient webClient;

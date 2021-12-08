@@ -1,4 +1,4 @@
-package com.kkulkkeog.order.common.exception;
+package com.kkulkkeog.menu.api.exception;
 
 public class MenuValidationException extends RuntimeException{
 

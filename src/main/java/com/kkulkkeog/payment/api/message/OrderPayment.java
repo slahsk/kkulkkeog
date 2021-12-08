@@ -9,8 +9,6 @@ import lombok.Getter;
 public class OrderPayment {
     private long orderNo;
 
-    private long totalPrice;
-
     private long resultPrice;
 
     private long memberNo;

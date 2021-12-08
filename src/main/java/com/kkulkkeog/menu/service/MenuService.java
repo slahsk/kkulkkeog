@@ -9,5 +9,5 @@ import reactor.core.publisher.Mono;
 public interface MenuService {
     Mono<MenuGroup> saveMenu(Mono<MenuGroup> menuGroup);
 
-    Mono<Boolean> orderValidation(List<MenuValidation> menuValidations);
+    Mono<Boolean> validationOrderMenu(List<MenuValidation> menuValidations);
 }

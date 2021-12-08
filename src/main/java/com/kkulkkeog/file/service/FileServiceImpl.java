@@ -27,7 +27,7 @@ public class FileServiceImpl implements FileService{
                     File file = fileRepository.save(File.builder().name(filePart.filename()).build());
 
                     return fileSave.save(filePart, file)
-                            .map((f) -> {
+                            .map(f -> {
                                 boolean createdFile = fileSave.hasFile(f.getPath(), f.getSize());
 
                                 if(createdFile){

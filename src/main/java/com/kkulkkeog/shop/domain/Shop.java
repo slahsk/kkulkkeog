@@ -1,11 +1,9 @@
 package com.kkulkkeog.shop.domain;
 
-import com.kkulkkeog.menu.domain.MenuGroup;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "TB_SHOP")

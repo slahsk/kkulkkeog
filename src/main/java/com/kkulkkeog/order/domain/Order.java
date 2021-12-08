@@ -47,9 +47,7 @@ public class Order {
     private LocalDateTime created;
 
 
-    public void calculateResultPrice(){
 
-    }
 
     public void calculateTotalPrice(){
 

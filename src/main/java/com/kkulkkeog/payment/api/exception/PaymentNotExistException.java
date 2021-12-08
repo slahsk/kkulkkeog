@@ -1,4 +1,4 @@
-package com.kkulkkeog.order.common.exception;
+package com.kkulkkeog.payment.api.exception;
 
 
 public class PaymentNotExistException extends RuntimeException{

@@ -24,7 +24,7 @@ import java.util.Optional;
 @ExtendWith(SpringExtension.class)
 @WebFluxTest(controllers = { MemberController.class })
 @Import(MemberServiceImpl.class)
-public class MemberControllerTest {
+class MemberControllerTest {
 
     @Autowired
     WebTestClient webClient;

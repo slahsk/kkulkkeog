@@ -3,6 +3,7 @@ package com.kkulkkeog.menu.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.kkulkkeog.menu.api.exception.MenuValidationException;
 import com.kkulkkeog.menu.api.message.MenuValidation;
 import com.kkulkkeog.menu.domain.MenuGroup;
 import com.kkulkkeog.menu.repository.MenuGroupRepository;
@@ -29,14 +30,19 @@ public class MenuServiceImpl implements MenuService{
     }
 
     @Override
-    public Mono<Boolean> orderValidation(List<MenuValidation> menuValidations) {
-
+    public Mono<Boolean> validationOrderMenu(List<MenuValidation> menuValidations) {
        return Flux.fromIterable(menuValidations)
         .flatMap(menuValidation -> {
             Optional<Integer> count = menuRepository.countByShopNoAndMenuNoAndPrice(menuValidation.getShopNo(),menuValidation.getMenuNo(), menuValidation.getPrice());
             return Mono.just(count.orElse(0));
         })
-        .as(integerFlux -> integerFlux.reduce(0, (x1, x2) -> x1 + x2).map(i -> i == menuValidations.size()));
+        .as(integerFlux -> integerFlux.reduce(0, Integer::sum).map(i ->  {
+            if(i != menuValidations.size()){
+               throw new MenuValidationException(menuValidations.toString());
+             }
+
+            return true;
+        }));
     }
 
 }

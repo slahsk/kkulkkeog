@@ -6,6 +6,6 @@ import reactor.core.publisher.Mono;
 
 public interface OrderService {
 
-    Mono<Order> saveOrder(Order order);
+    Mono<Order> saveOrder(final Order order);
 
 }

@@ -1,7 +1,6 @@
 package com.kkulkkeog.coupon.domain;
 
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,7 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @EntityListeners(AuditingEntityListener.class)
-public class Coupon {
+public class Coupon{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "coupon")
     private Long couponNo;
@@ -31,11 +30,9 @@ public class Coupon {
 
     private String message;
 
-    private long maxPrice;
+    private long minimumPrice;
 
-    private int percent;
-
-    private int price;
+    private long price;
 
     @Enumerated(EnumType.STRING)
     private CouponIssuance couponIssuance;
@@ -49,7 +46,7 @@ public class Coupon {
 
     private boolean availableCoupon;
 
-    private LocalDateTime useTime;
+    private LocalDateTime usedTime;
 
     @CreatedDate
     private LocalDateTime created;
@@ -59,18 +56,16 @@ public class Coupon {
 
 
     public boolean isOrderAvailableCoupon(long shopNo, long memberNo) {
+        boolean result = true;
+
         if(!availableCoupon){
-            return false;
+            result =  false;
+        }else if(this.shopNo != shopNo){
+            result =  false;
+        }else if(this.memberNo != memberNo){
+            result =  false;
         }
 
-        if(this.shopNo != shopNo){
-            return false;
-        }
-
-        if(this.memberNo != memberNo){
-            return false;
-        }
-
-        return true;
+        return availableCoupon;
     }
 }

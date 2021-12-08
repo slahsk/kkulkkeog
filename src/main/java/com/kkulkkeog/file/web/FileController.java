@@ -2,14 +2,13 @@ package com.kkulkkeog.file.web;
 
 import com.kkulkkeog.common.Constant;
 import com.kkulkkeog.file.api.web.PostFileResponse;
-import com.kkulkkeog.file.domain.mapper.FileMapper;
 import com.kkulkkeog.file.service.FileService;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.codec.multipart.FilePart;
-import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController

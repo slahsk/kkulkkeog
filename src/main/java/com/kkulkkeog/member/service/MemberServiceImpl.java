@@ -27,8 +27,7 @@ public class MemberServiceImpl implements MemberService{
                 Mono.error(new MemberIdDuplicateException(member.getMemberId()));
             }
             
-            Member data = memberRepository.save(member);
-            return data;
+            return memberRepository.save(member);
         });
     }
 

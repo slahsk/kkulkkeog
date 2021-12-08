@@ -24,7 +24,7 @@ public class Address {
 
     private String title;
 
-    private String address;
+    private String memberAddress;
 
     private String message;
 
