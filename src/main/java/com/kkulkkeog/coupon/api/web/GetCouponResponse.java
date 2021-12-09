@@ -4,23 +4,28 @@ import com.kkulkkeog.coupon.domain.CouponIssuance;
 import com.kkulkkeog.coupon.domain.CouponType;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Builder
+@ToString
 public class GetCouponResponse {
-    private Long no;
+
+    private long couponNo;
+
+    private long memberNo;
+
+    private long shopNo;
 
     private String title;
 
     private String message;
 
-    private long maxPrice;
+    private long minimumPrice;
 
-    private int percent;
-
-    private int price;
+    private long price;
 
     private CouponIssuance couponIssuance;
 
@@ -29,4 +34,12 @@ public class GetCouponResponse {
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
+
+    private boolean availableCoupon;
+
+    private LocalDateTime usedTime;
+
+    private LocalDateTime created;
+
+    private LocalDateTime updated;
 }

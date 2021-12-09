@@ -5,11 +5,13 @@ import com.kkulkkeog.coupon.domain.CouponType;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Builder
 @Getter
+@ToString
 public class PutCouponResponse {
     private Long no;
 

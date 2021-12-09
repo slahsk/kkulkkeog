@@ -54,18 +54,10 @@ public class Coupon{
     @LastModifiedDate
     private LocalDateTime updated;
 
+    private boolean deleted;
+
 
     public boolean isOrderAvailableCoupon(long shopNo, long memberNo) {
-        boolean result = true;
-
-        if(!availableCoupon){
-            result =  false;
-        }else if(this.shopNo != shopNo){
-            result =  false;
-        }else if(this.memberNo != memberNo){
-            result =  false;
-        }
-
-        return availableCoupon;
+        return availableCoupon && this.shopNo == shopNo && this.memberNo == memberNo;
     }
 }

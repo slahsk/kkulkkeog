@@ -7,9 +7,11 @@ import com.kkulkkeog.coupon.domain.CouponType;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @Builder
+@ToString
 public class PutCouponRequest {
     private String title;
 
