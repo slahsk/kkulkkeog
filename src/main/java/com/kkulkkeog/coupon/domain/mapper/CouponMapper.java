@@ -1,6 +1,6 @@
 package com.kkulkkeog.coupon.domain.mapper;
 
-import com.kkulkkeog.coupon.api.web.GetCouponResponse;
+import com.kkulkkeog.coupon.api.web.CouponResponse;
 import com.kkulkkeog.coupon.api.web.GetCouponsRequest;
 import com.kkulkkeog.coupon.api.web.PostCouponRequest;
 import com.kkulkkeog.coupon.domain.Coupon;
@@ -13,7 +13,7 @@ public interface CouponMapper {
 
     Coupon toCoupon(GetCouponsRequest getCouponsRequest);
 
-    GetCouponResponse toGetCouponResponse(Coupon coupon);
+    CouponResponse toGetCouponResponse(Coupon coupon);
 
     Coupon toCoupon(PostCouponRequest postCouponRequest);
 

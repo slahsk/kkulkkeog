@@ -1,7 +1,7 @@
 package com.kkulkkeog.payment.service;
 
 import com.kkulkkeog.payment.api.message.OrderPayment;
-import com.kkulkkeog.payment.domain.Payment;
+import com.kkulkkeog.payment.Payment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;

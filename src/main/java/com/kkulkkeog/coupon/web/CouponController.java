@@ -1,7 +1,7 @@
 package com.kkulkkeog.coupon.web;
 
 import com.kkulkkeog.common.Constant;
-import com.kkulkkeog.coupon.api.web.GetCouponResponse;
+import com.kkulkkeog.coupon.api.web.CouponResponse;
 import com.kkulkkeog.coupon.api.web.GetCouponsRequest;
 import com.kkulkkeog.coupon.api.web.PostCouponRequest;
 import com.kkulkkeog.coupon.domain.Coupon;
@@ -20,7 +20,7 @@ public class CouponController {
     private final CouponService couponService;
 
     @GetMapping("/coupons")
-    public Flux<GetCouponResponse> getCoupons(GetCouponsRequest getCouponsRequest){
+    public Flux<CouponResponse> getCoupons(GetCouponsRequest getCouponsRequest){
         Coupon coupon = CouponMapper.INSTANCE.toCoupon(getCouponsRequest);
 
         Flux<Coupon> allCoupon = couponService.findAllCoupon(Example.of(coupon));
@@ -29,14 +29,14 @@ public class CouponController {
     }
 
     @GetMapping("/coupons/{couponNo}")
-    public Mono<GetCouponResponse> getCoupon(@PathVariable long couponNo){
+    public Mono<CouponResponse> getCoupon(@PathVariable long couponNo){
         Mono<Coupon> coupon = couponService.findCoupon(couponNo);
 
         return coupon.map(CouponMapper.INSTANCE::toGetCouponResponse);
     }
 
     @PostMapping("/coupons")
-    public Mono<GetCouponResponse> postCoupon(PostCouponRequest postCouponRequest){
+    public Mono<CouponResponse> postCoupon(PostCouponRequest postCouponRequest){
         Coupon coupon = CouponMapper.INSTANCE.toCoupon(postCouponRequest);
 
         Mono<Coupon> saveCoupon = couponService.saveCoupon(coupon);
@@ -46,9 +46,7 @@ public class CouponController {
 
     @DeleteMapping("/coupons/{couponNo}")
     public Mono<Void> deleteCoupon(@PathVariable long couponNo){
-        Mono<Void> deleteCoupon = couponService.deleteCoupon(couponNo);
-
-        return deleteCoupon;
+        return couponService.deleteCoupon(couponNo);
     }
 
 

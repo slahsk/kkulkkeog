@@ -13,9 +13,5 @@ public interface MemberMapper {
 
     Member toMember(Long no, PutMemberRequest request);
 
-    PostMemberResponse toPostMemberResponse(Member member);
-
-    GetMemberResponse toGetMemberResponse(Member member);
-
-    PutMemberResponse toPutMemberResponse(Member member);
+    MemberResponse toMemberResponse(Member member);
 }

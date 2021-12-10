@@ -49,8 +49,6 @@ public class ShopController {
 
     @DeleteMapping("/shops/{shopNo}")
     public Mono<Void> deleteShop(@PathVariable long shopNo){
-        Mono<Void> deleteShop = shopService.deleteShop(shopNo);
-
-        return deleteShop;
+        return shopService.deleteShop(shopNo);
     }
 }

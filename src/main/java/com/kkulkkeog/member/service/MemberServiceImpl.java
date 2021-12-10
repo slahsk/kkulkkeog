@@ -3,7 +3,7 @@ package com.kkulkkeog.member.service;
 import com.kkulkkeog.member.domain.Member;
 import com.kkulkkeog.member.repository.MemberRepository;
 import com.kkulkkeog.member.common.exception.MemberIdDuplicateException;
-import com.kkulkkeog.member.common.exception.MemberNotFindException;
+import com.kkulkkeog.member.common.exception.MemberNotFoundException;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,10 +23,11 @@ public class MemberServiceImpl implements MemberService{
     public Mono<Member> saveMember(Member member) {
         return Mono.just(member)
         .map( m -> {
+
             if(memberRepository.findByMemberId(member.getMemberId()).isPresent()){
-                Mono.error(new MemberIdDuplicateException(member.getMemberId()));
+               throw new MemberIdDuplicateException(member.getMemberId());
             }
-            
+
             return memberRepository.save(member);
         });
     }
@@ -53,7 +54,7 @@ public class MemberServiceImpl implements MemberService{
     public Mono<Member> findMember(Long no) {
         Optional<Member> member = memberRepository.findById(no);
 
-        return Mono.just(member.orElseThrow(() -> new MemberNotFindException(no)));
+        return Mono.just(member.orElseThrow(() -> new MemberNotFoundException(no)));
     }
 
 

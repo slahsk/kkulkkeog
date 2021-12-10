@@ -1,10 +1,10 @@
-package com.kkulkkeog.payment.domain;
+package com.kkulkkeog.payment;
 
 import com.kkulkkeog.payment.api.message.OrderPayment;
 
-public class CashPayment implements Payment {
+public class NaverPayPayment implements Payment{
 
-    public CashPayment(OrderPayment orderPayment) {
+    public NaverPayPayment(OrderPayment orderPayment) {
 
     }
 

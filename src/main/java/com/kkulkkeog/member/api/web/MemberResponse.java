@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class GetMemberResponse {
+public class MemberResponse {
     private Long no;
 
     private String email;

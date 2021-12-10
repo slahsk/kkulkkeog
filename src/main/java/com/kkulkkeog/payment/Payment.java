@@ -1,4 +1,4 @@
-package com.kkulkkeog.payment.domain;
+package com.kkulkkeog.payment;
 
 import com.kkulkkeog.payment.api.exception.PaymentNotExistException;
 import com.kkulkkeog.payment.api.message.OrderPayment;
