@@ -5,6 +5,7 @@ import com.kkulkkeog.coupon.api.web.PostCouponRequest;
 import com.kkulkkeog.coupon.domain.Coupon;
 import com.kkulkkeog.shop.api.web.GetShopsRequest;
 import com.kkulkkeog.shop.api.web.PostShopRequest;
+import com.kkulkkeog.shop.api.web.ShopResponse;
 import com.kkulkkeog.shop.domain.Shop;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -16,4 +17,6 @@ public interface ShopMapper {
     Shop toShop(GetShopsRequest getShopsRequest);
 
     Shop toShop(PostShopRequest postCouponRequest);
+
+    ShopResponse toShopResponse(Shop shop);
 }

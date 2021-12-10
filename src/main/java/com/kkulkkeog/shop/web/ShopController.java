@@ -7,6 +7,7 @@ import com.kkulkkeog.coupon.domain.Coupon;
 import com.kkulkkeog.coupon.domain.mapper.CouponMapper;
 import com.kkulkkeog.shop.api.web.GetShopsRequest;
 import com.kkulkkeog.shop.api.web.PostShopRequest;
+import com.kkulkkeog.shop.api.web.ShopResponse;
 import com.kkulkkeog.shop.domain.Shop;
 import com.kkulkkeog.shop.domain.mapper.ShopMapper;
 import com.kkulkkeog.shop.service.ShopService;
@@ -23,28 +24,29 @@ public class ShopController {
     private final ShopService shopService;
 
     @GetMapping("/shops")
-    public Flux<Shop> getShops(GetShopsRequest getShopsRequest){
+    public Flux<ShopResponse> getShops(GetShopsRequest getShopsRequest){
         Shop shop = ShopMapper.INSTANCE.toShop(getShopsRequest);
 
         Flux<Shop> allCoupon = shopService.findAllShops(Example.of(shop));
 
-        return allCoupon;
+
+        return allCoupon.map(ShopMapper.INSTANCE::toShopResponse);
     }
 
     @GetMapping("/shops/{shopNo}")
-    public Mono<Shop> getShop(@PathVariable long shopNo){
+    public Mono<ShopResponse> getShop(@PathVariable long shopNo){
         Mono<Shop> shop = shopService.findShop(shopNo);
 
-        return shop;
+        return shop.map(ShopMapper.INSTANCE::toShopResponse);
     }
 
     @PostMapping("/shops")
-    public Mono<Shop> postShop(PostShopRequest postCouponRequest){
+    public Mono<ShopResponse> postShop(PostShopRequest postCouponRequest){
         Shop shop = ShopMapper.INSTANCE.toShop(postCouponRequest);
 
         Mono<Shop> saveShop = shopService.saveShop(shop);
 
-        return saveShop;
+        return saveShop.map(ShopMapper.INSTANCE::toShopResponse);
     }
 
     @DeleteMapping("/shops/{shopNo}")
