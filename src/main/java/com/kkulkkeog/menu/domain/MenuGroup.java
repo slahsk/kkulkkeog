@@ -26,13 +26,13 @@ import lombok.Setter;
 public class MenuGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqMenuGroup")
-    private Long no;
+    private Long menuGroupNo;
 
     private Long shopNo;
 
-    private String name;
+    private String menuGroupName;
 
-    private String message;
+    private String menuGroupMessage;
 
     private int menuGroupOrder;
 
