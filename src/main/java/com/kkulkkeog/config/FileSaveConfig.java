@@ -1,8 +1,8 @@
 package com.kkulkkeog.config;
 
-import com.kkulkkeog.file.config.FileProperty;
-import com.kkulkkeog.file.service.FileSave;
-import com.kkulkkeog.file.service.SimpleFileSave;
+import com.kkulkkeog.file.v1.config.FileProperty;
+import com.kkulkkeog.file.v1.service.FileSave;
+import com.kkulkkeog.file.v1.service.SimpleFileSave;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
