@@ -35,7 +35,7 @@ class MenuServiceImplTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    @DisplayName("메뉴 검사 응답값 성공")
+    @DisplayName("메뉴 검사 - 성공")
     void testOrderValidationTrue(){
         MenuValidation menuValidation = MenuValidation.builder().menuNo(1).shopNo(100).price(2000).build();
         MenuValidation menuValidation2 = MenuValidation.builder().menuNo(2).shopNo(100).price(4000).build();
@@ -57,7 +57,7 @@ class MenuServiceImplTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    @DisplayName("메뉴 검사 응답값 실패(MenuValidationException)")
+    @DisplayName("메뉴 검사 - 실패(MenuValidationException)")
     void testOrderValidationMenuValidationException(){
         MenuValidation menuValidation = MenuValidation.builder().menuNo(1).shopNo(100).price(2000).build();
         MenuValidation menuValidation2 = MenuValidation.builder().menuNo(2).shopNo(100).price(4000).build();

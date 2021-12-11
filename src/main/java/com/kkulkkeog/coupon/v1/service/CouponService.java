@@ -22,4 +22,5 @@ public interface CouponService {
     Mono<Void> deleteCoupon(long couponNo);
 
     Mono<Coupon> findCoupon(long couponNo);
+
 }

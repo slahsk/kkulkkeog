@@ -2,8 +2,7 @@ package com.kkulkkeog.coupon.v1.api.web;
 
 import java.time.LocalDateTime;
 
-import com.kkulkkeog.coupon.v1.domain.CouponIssuance;
-import com.kkulkkeog.coupon.v1.domain.CouponType;
+import com.kkulkkeog.coupon.v1.domain.CouponIssuer;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -18,19 +17,17 @@ public class PostCouponRequest {
 
     private long shopNo;
 
-    private String title;
+    private String couponName;
 
-    private String message;
+    private String couponDescription;
 
-    private long minimumPrice;
+    private long minimumOrderPrice;
 
-    private long price;
+    private long discountPrice;
 
-    private CouponIssuance couponIssuance;
+    private CouponIssuer couponIssuer;
 
-    private CouponType couponType;
+    private LocalDateTime startDate;
 
-    private LocalDateTime startTime;
-
-    private LocalDateTime endTime;
+    private LocalDateTime endDate;
 }

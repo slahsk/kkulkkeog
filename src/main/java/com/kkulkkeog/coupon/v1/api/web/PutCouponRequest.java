@@ -2,7 +2,7 @@ package com.kkulkkeog.coupon.v1.api.web;
 
 import java.time.LocalDateTime;
 
-import com.kkulkkeog.coupon.v1.domain.CouponIssuance;
+import com.kkulkkeog.coupon.v1.domain.CouponIssuer;
 import com.kkulkkeog.coupon.v1.domain.CouponType;
 
 import lombok.Builder;
@@ -23,7 +23,7 @@ public class PutCouponRequest {
 
     private int price;
 
-    private CouponIssuance couponIssuance;
+    private CouponIssuer couponIssuer;
 
     private CouponType couponType;
 

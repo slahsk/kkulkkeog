@@ -1,6 +1,6 @@
 package com.kkulkkeog.coupon.v1.api.web;
 
-import com.kkulkkeog.coupon.v1.domain.CouponIssuance;
+import com.kkulkkeog.coupon.v1.domain.CouponIssuer;
 import com.kkulkkeog.coupon.v1.domain.CouponType;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +27,7 @@ public class CouponResponse {
 
     private long price;
 
-    private CouponIssuance couponIssuance;
+    private CouponIssuer couponIssuer;
 
     private CouponType couponType;
 

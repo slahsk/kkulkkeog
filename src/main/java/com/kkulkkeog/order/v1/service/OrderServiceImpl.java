@@ -48,6 +48,7 @@ public class OrderServiceImpl implements OrderService{
                         return couponService.calculatePrice(couponCalculatePrice);
                     }).flatMap( b -> {
                         data.setOrderState(OrderState.COUPON_CALCULATE_SUCCESS);
+                        data.setResultPrice(b);
 
                         OrderPayment orderPayment = OrderMapper.INSTANCE.toOrderPayment(data);
                         return  paymentService.payment(orderPayment);

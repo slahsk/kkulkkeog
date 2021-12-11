@@ -50,6 +50,7 @@ public class CouponServiceImpl implements CouponService {
         return Mono.just(coupon.orElseThrow(() -> new CouponNotFoundException(couponNo)));
     }
 
+
     @Override
     public Mono<Boolean> validationOrderCoupon(List<CouponValidation> couponValidations) {
         return Flux.fromIterable(couponValidations)
@@ -59,12 +60,13 @@ public class CouponServiceImpl implements CouponService {
 
                     Coupon coupon = couponMap.get(couponValidation.getCouponNo());
 
-                    boolean orderAvailableCoupon = coupon.isOrderAvailableCoupon(couponValidation.getShopNo(), couponValidation.getMemberNo());
+                    //TODO 쿠폰 검사
+                    boolean orderAvailableCoupon = true;
                    return Mono.just(orderAvailableCoupon);
                 })
                 .filter( b -> b)
                 .as(booleanFlux -> booleanFlux.count().map(i ->{
-
+                    log.debug("validationOrderCoupon - count: {}, list size:{}",i, couponValidations.size());
                     if( i != couponValidations.size()){
                         throw new CouponValidationException(couponValidations.toString());
                     }
@@ -76,10 +78,12 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public Mono<Long> calculatePrice(CouponCalculatePrice couponCalculatePrice) {
         return Mono.just(couponCalculatePrice).map( o -> {
-            long sum = couponRepository.findAllById(couponCalculatePrice.getCouponNos()).stream()
+            long sum = couponRepository.findAllById(couponCalculatePrice.getCouponNos())
+                    .stream()
                     .mapToLong(Coupon::getDiscountPrice).sum();
             return  couponCalculatePrice.getOrderTotalPrice() - sum;
         });
     }
+
 
 }

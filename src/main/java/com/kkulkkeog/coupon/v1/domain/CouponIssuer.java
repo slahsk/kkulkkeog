@@ -1,4 +1,5 @@
 package com.kkulkkeog.coupon.v1.domain;
 
-public class CouponIssuance {
+public enum CouponIssuer {
+    EVENT,SHOP
 }
