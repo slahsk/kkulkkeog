@@ -23,8 +23,8 @@ public class MenuServiceImpl implements MenuService{
     @Override
     public Mono<Boolean> validationOrderMenu(List<MenuValidation> menuValidations) {
        return Flux.fromIterable(menuValidations)
-        .flatMap(menuValidation -> {
-            Optional<Integer> count = menuRepository.countByShopNoAndMenuNoAndPrice(menuValidation.getShopNo(),menuValidation.getMenuNo(), menuValidation.getPrice());
+        .flatMap(mv -> {
+            Optional<Integer> count = menuRepository.countByShopNoAndMenuNoAndPrice(mv.getShopNo(),mv.getMenuNo(), mv.getPrice());
             return Mono.just(count.orElse(0));
         })
         .as(integerFlux -> integerFlux.reduce(0, Integer::sum).map(i ->  {

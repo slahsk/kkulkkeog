@@ -1,4 +1,4 @@
-package com.kkulkkeog.review.v1.api.web;
+package com.kkulkkeog.menu.v1.api.web;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -7,6 +7,6 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class GetReviewRequest {
+public class GetMenuGroupsRequest {
     private Long shopNo;
 }

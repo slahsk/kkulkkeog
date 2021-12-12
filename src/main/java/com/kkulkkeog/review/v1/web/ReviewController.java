@@ -27,14 +27,14 @@ public class ReviewController {
         Flux<Review> allReview = reviewService.findAllReviews(Example.of(review));
 
 
-        return allReview.map(ReviewMapper.INSTANCE::toReviceResponse);
+        return allReview.map(ReviewMapper.INSTANCE::toReviewResponse);
     }
 
     @GetMapping("/reviews/{reviewNo}")
-    public Mono<ReviewResponse> getReview(@PathVariable long reviewNo){
-        Mono<Review> shop = reviewService.findReview(reviewNo);
+    public Mono<ReviewResponse> getReview(@PathVariable Long reviewNo){
+        Mono<Review> review = reviewService.findReview(reviewNo);
 
-        return shop.map(ReviewMapper.INSTANCE::toReviceResponse);
+        return review.map(ReviewMapper.INSTANCE::toReviewResponse);
     }
 
     @PostMapping("/reviews")
@@ -43,7 +43,7 @@ public class ReviewController {
 
         Mono<Review> saveReview = reviewService.saveReview(review);
 
-        return saveReview.map(ReviewMapper.INSTANCE::toReviceResponse);
+        return saveReview.map(ReviewMapper.INSTANCE::toReviewResponse);
     }
 
     @DeleteMapping("/reviews/{reviewNo}")

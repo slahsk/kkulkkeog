@@ -24,7 +24,15 @@ public class Review {
 
     private long shopNo;
 
+    private long userNo;
+
+    private long fileNo;
+
+    private String userName;
+
     private String reviewMessage;
+
+    private float reviewScore;
 
     @CreatedDate
     private LocalDateTime created;

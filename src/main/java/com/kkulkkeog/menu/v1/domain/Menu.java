@@ -18,13 +18,13 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqMenu")
     private Long menuNo;
 
+    private long menuGroupNo;
+
     private String menuName;
 
     private long shopNo;
 
     private int price;
-
-    private int salesRate;
 
     private String menuDescription;
 

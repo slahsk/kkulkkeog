@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class PostMenuGroupRequest {
+public class PutMenuGroupRequest {
 
     private String menuGroupName;
 

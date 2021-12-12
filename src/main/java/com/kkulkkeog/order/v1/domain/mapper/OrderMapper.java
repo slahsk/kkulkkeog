@@ -3,6 +3,8 @@ package com.kkulkkeog.order.v1.domain.mapper;
 import com.kkulkkeog.coupon.v1.api.message.CouponCalculatePrice;
 import com.kkulkkeog.coupon.v1.api.message.CouponValidation;
 import com.kkulkkeog.menu.v1.api.message.MenuValidation;
+import com.kkulkkeog.order.v1.api.web.OrderResponse;
+import com.kkulkkeog.order.v1.api.web.PostOrderRequest;
 import com.kkulkkeog.order.v1.domain.Order;
 import com.kkulkkeog.order.v1.domain.OrderCoupon;
 import com.kkulkkeog.order.v1.domain.OrderMenu;
@@ -18,6 +20,8 @@ import java.util.List;
 public interface OrderMapper {
     OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 
+    Order toOrder(PostOrderRequest postOrderRequest);
+
     List<MenuValidation> toMenuValidations(List<OrderMenu> orderMenus);
 
     List<CouponValidation> toCouponValidations(List<OrderCoupon> orderCoupons);
@@ -29,10 +33,9 @@ public interface OrderMapper {
     CouponCalculatePrice toCouponCalculatePrice(Order order);
 
     @Named("orderCouponNo")
-    public static Long longToOrderCouponNo(OrderCoupon orderCoupon) {
+    static Long longToOrderCouponNo(OrderCoupon orderCoupon) {
         return orderCoupon.getOrderCouponNo();
     }
 
-
-
+    OrderResponse toOrderResponse(Order order);
 }

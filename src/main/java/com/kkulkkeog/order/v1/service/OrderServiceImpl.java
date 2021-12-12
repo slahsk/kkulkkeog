@@ -7,6 +7,7 @@ import com.kkulkkeog.menu.v1.api.message.MenuValidation;
 import com.kkulkkeog.menu.v1.service.MenuService;
 import com.kkulkkeog.coupon.v1.common.exception.CouponValidationException;
 import com.kkulkkeog.menu.v1.common.exception.MenuValidationException;
+import com.kkulkkeog.order.v1.common.exception.OrderNotFoundException;
 import com.kkulkkeog.order.v1.domain.Order;
 import com.kkulkkeog.order.v1.domain.OrderState;
 import com.kkulkkeog.order.v1.domain.mapper.OrderMapper;
@@ -27,6 +28,13 @@ public class OrderServiceImpl implements OrderService{
     private final PaymentService paymentService;
     private final MenuService menuService;
     private final CouponService couponService;
+
+    @Override
+    public Mono<Order> findOrder(long orderNo) {
+       return Mono.just(orderNo)
+               .map(orderRepository::findById)
+               .map(order -> order.orElseThrow(() -> new OrderNotFoundException(orderNo)));
+    }
 
     @Override
     public Mono<Order> saveOrder(final Order order) {
@@ -73,5 +81,15 @@ public class OrderServiceImpl implements OrderService{
 
     }
 
-    
+    @Override
+    public Mono<Void> deleteOrder(long orderNo) {
+        return findOrder(orderNo)
+                .doOnNext(order -> {
+                    order.setDeleted(true);
+                    order.setOrderState(OrderState.CANCEL);
+                })
+                .then();
+    }
+
+
 }

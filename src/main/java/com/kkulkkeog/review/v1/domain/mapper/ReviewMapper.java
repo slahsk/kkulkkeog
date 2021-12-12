@@ -13,7 +13,7 @@ public interface ReviewMapper {
 
     Review toReview(GetReviewRequest getReviewRequest);
 
-    ReviewResponse toReviceResponse(Review review);
+    ReviewResponse toReviewResponse(Review review);
 
     Review toReview(PostReviewRequest postCouponRequest);
 }

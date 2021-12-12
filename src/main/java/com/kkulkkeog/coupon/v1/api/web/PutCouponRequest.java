@@ -9,25 +9,35 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Builder
 @ToString
 public class PutCouponRequest {
-    private String title;
 
-    private String message;
+    @NotNull
+    private long shopNo;
 
-    private long maxPrice;
+    @NotBlank
+    private String couponName;
 
-    private int percent;
+    @NotBlank
+    private String couponDescription;
 
-    private int price;
+    @NotNull
+    private Long minimumOrderPrice;
 
+    @NotNull
+    private Long discountPrice;
+
+    @NotNull
     private CouponIssuer couponIssuer;
 
-    private CouponType couponType;
+    @NotNull
+    private LocalDateTime startDate;
 
-    private LocalDateTime startTime;
-
-    private LocalDateTime endTime;
+    @NotNull
+    private LocalDateTime endDate;
 }

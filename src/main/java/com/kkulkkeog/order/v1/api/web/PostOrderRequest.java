@@ -9,11 +9,11 @@ import java.util.List;
 @Builder
 public class PostOrderRequest {
 
-    private long totalPrice;
+    private Long totalPrice;
 
-    private long memberCouponNo;
+    private Long resultPrice;
 
-    private long couponNo;
+    private Long couponNo;
 
     private List<OrderMenu> orderMenus;
 
@@ -24,16 +24,16 @@ public class PostOrderRequest {
     @Getter
     @Builder
     public static class OrderMenu{
-        private long menuNo;
+        private Long menuNo;
 
-        private long price;
+        private Long price;
     }
 
     @Getter
     @Builder
     public static class OrderCoupon{
-        private long couponNo;
+        private Long couponNo;
 
-        private long memberNo;
+        private Long userNo;
     }
 }

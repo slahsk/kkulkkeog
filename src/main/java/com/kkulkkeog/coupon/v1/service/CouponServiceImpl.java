@@ -46,8 +46,9 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public Mono<Coupon> findCoupon(long couponNo) {
-        Optional<Coupon> coupon = couponRepository.findById(couponNo);
-        return Mono.just(coupon.orElseThrow(() -> new CouponNotFoundException(couponNo)));
+        return Mono.just(couponNo)
+                .map(couponRepository::findById)
+                .map(coupon -> coupon.orElseThrow(() -> new CouponNotFoundException(couponNo)));
     }
 
 

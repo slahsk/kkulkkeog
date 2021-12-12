@@ -6,11 +6,13 @@ import com.kkulkkeog.review.v1.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ReviewServiceImpl implements ReviewService{
     private final ReviewRepository reviewRepository;
 
@@ -32,9 +34,10 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public Mono<Void> deleteReview(long reviewNo) {
-        Mono<Review> review = findReview(reviewNo);
-
-        return  review.doOnNext(r -> r.setDeleted(true))
-                .then();
+       return findReview(reviewNo)
+               .doOnNext(review -> {
+                   review.setDeleted(true);
+               })
+               .then();
     }
 }

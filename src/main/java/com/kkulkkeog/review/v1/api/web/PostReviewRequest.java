@@ -8,4 +8,16 @@ import lombok.ToString;
 @Builder
 @ToString
 public class PostReviewRequest {
+
+    private Long shopNo;
+
+    private Long userNo;
+
+    private Long fileNo;
+
+    private String userName;
+
+    private String reviewMessage;
+
+    private Float reviewScore;
 }

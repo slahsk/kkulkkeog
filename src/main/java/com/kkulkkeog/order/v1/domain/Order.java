@@ -35,7 +35,7 @@ public class Order {
 
     private long resultPrice;
 
-    private long memberNo;
+    private long userNo;
 
     @Enumerated(EnumType.STRING)
     private OrderState orderState;
@@ -46,12 +46,9 @@ public class Order {
     @CreatedDate
     private LocalDateTime created;
 
+    private boolean deleted;
 
 
-
-    public void calculateTotalPrice(){
-
-    }
 
 
 }

@@ -8,5 +8,6 @@ public enum OrderState {
     COUPON_CALCULATE_SUCCESS,
     COUPON_VALIDATION_FAIL,
     PAYMENT_FAIL,
+    CANCEL,
     ORDER_SUCCESS
 }

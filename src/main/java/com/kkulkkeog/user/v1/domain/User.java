@@ -27,7 +27,7 @@ public class User {
 
     private String password;
 
-    private String name;
+    private String userName;
 
     @CreatedDate
     private LocalDateTime created;

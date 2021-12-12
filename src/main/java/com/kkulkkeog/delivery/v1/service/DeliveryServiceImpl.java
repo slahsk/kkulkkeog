@@ -22,20 +22,23 @@ public class DeliveryServiceImpl implements DeliveryService{
 
     @Override
     public Mono<Delivery> findDelivery(long deliveryNo) {
-        return Mono.just(deliveryRepository.findById(deliveryNo).orElseThrow( () -> new DeliveryNotFoundException(deliveryNo)));
+        return Mono.just(deliveryNo)
+                .map(deliveryRepository::findById)
+                .map( delivery -> .orElseThrow( () -> new DeliveryNotFoundException(deliveryNo)));
+
     }
 
     @Override
     public Mono<Delivery> saveDelivery(Delivery delivery) {
-
-        return Mono.just(deliveryRepository.save(delivery));
+        return Mono.just(delivery)
+                .map(deliveryRepository::save);
     }
 
     @Override
     public Mono<Void> deleteDelivery(long deliveryNo) {
-        Mono<Delivery> review = findDelivery(deliveryNo);
-
-        return  review.doOnNext(r -> r.setDeleted(true))
+        return Mono.just(deliveryNo)
+                .flatMap(this::findDelivery)
+                .doOnNext(r -> r.setDeleted(true))
                 .then();
     }
 }
