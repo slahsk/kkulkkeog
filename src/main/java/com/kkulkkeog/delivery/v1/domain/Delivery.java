@@ -27,9 +27,9 @@ public class Delivery {
 
     private String deliveryDescription;
 
-    private long orderNo;
+    private Long orderNo;
 
-    private long memberNo;
+    private Long memberNo;
 
     @Enumerated(EnumType.STRING)
     private DeliveryType deliveryType;
@@ -43,6 +43,6 @@ public class Delivery {
     @LastModifiedDate
     private LocalDateTime updated;
 
-    private boolean deleted;
+    private Boolean deleted;
 
 }

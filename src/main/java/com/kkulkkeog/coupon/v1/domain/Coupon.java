@@ -24,15 +24,15 @@ public class Coupon{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long couponNo;
 
-    private long shopNo;
+    private Long shopNo;
 
     private String couponName;
 
     private String couponDescription;
 
-    private long minimumOrderPrice;
+    private Long minimumOrderPrice;
 
-    private long discountPrice;
+    private Long discountPrice;
 
     @Enumerated(EnumType.STRING)
     private CouponIssuer couponIssuer;
@@ -47,7 +47,7 @@ public class Coupon{
     @LastModifiedDate
     private LocalDateTime updated;
 
-    private boolean deleted;
+    private Boolean deleted;
 
     public boolean isConponAvailable(){
         LocalDateTime now = LocalDateTime.now();

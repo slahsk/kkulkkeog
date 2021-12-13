@@ -24,6 +24,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 @WebFluxTest(controllers = { UserController.class })
 @Import(UserServiceImpl.class)
+@DisplayName("사용자 web Test")
 class UserControllerTest {
 
     @Autowired

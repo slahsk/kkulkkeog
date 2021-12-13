@@ -20,12 +20,11 @@ public class CouponUserServiceImpl implements CouponUserService {
 
     @Override
     public Mono<CouponUser> saveCouponUser(CouponUser couponUser) {
-        //TODO c.getUserNo() -> c.getCouponNo() 변경
        return Mono.just(couponUser)
-               .flatMap( c -> couponService.findCoupon(c.getUserNo()))
+               .flatMap( c -> couponService.findCoupon(c.getCouponNo()))
                .doOnNext(coupon -> {
                    if(!coupon.isConponAvailable()){
-                       throw new CouponIssuanceFailException(couponUser.getUserNo(), couponUser.getUserNo());
+                       throw new CouponIssuanceFailException(couponUser.getCouponNo(), couponUser.getUserNo());
                    }
                })
                .then(Mono.just(couponUser))

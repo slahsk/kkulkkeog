@@ -22,12 +22,11 @@ public class CouponUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long couponUserNo;
 
-    private long userNo;
+    private Long userNo;
 
-//    @Column(name = "coupon_no")
-//    private long couponNo;
+    private Long couponNo;
 
-    private boolean used;
+    private Boolean used;
 
     private LocalDateTime usedTime;
 
@@ -37,9 +36,9 @@ public class CouponUser {
     @LastModifiedDate
     private LocalDateTime updated;
 
-    private boolean deleted;
+    private Boolean deleted;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "coupon_no")
+    @JoinColumn(name = "couponNo", insertable = false, updatable = false)
     private Coupon coupon;
 }

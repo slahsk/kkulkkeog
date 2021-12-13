@@ -19,9 +19,9 @@ public class File {
 
     private String name;
 
-    private long size;
+    private Long size;
 
     private String path;
 
-    private boolean createdFile;
+    private Boolean createdFile;
 }

@@ -36,8 +36,8 @@ class CouponServiceImplTest {
         CouponValidation couponValidation1 = CouponValidation.builder().couponNo(1).memberNo(100).shopNo(11).build();
         CouponValidation couponValidation2 = CouponValidation.builder().couponNo(2).memberNo(100).shopNo(11).build();
 
-        Coupon coupon1 = Coupon.builder().couponNo(1L).shopNo(11).build();
-        Coupon coupon2 = Coupon.builder().couponNo(2L).shopNo(11).build();
+        Coupon coupon1 = Coupon.builder().couponNo(1L).shopNo(11L).build();
+        Coupon coupon2 = Coupon.builder().couponNo(2L).shopNo(11L).build();
 
 
         when(couponRepository.findAllById(anyList())).thenReturn(List.of(coupon1, coupon2));
@@ -74,8 +74,8 @@ class CouponServiceImplTest {
         CouponCalculatePrice couponCalculatePrice = CouponCalculatePrice.builder().couponNos(List.of(1L,2L)).orderTotalPrice(5000).build();
 
 
-        Coupon coupon1 = Coupon.builder().couponNo(1L).shopNo(11).discountPrice(500).build();
-        Coupon coupon2 = Coupon.builder().couponNo(2L).shopNo(11).discountPrice(300).build();
+        Coupon coupon1 = Coupon.builder().couponNo(1L).shopNo(11L).discountPrice(500L).build();
+        Coupon coupon2 = Coupon.builder().couponNo(2L).shopNo(11L).discountPrice(300L).build();
 
         when(couponRepository.findAllById(anyList())).thenReturn(List.of(coupon1, coupon2));
 
