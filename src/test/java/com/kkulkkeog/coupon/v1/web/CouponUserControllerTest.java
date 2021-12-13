@@ -34,7 +34,7 @@ class CouponUserControllerTest {
         couponUser = CouponUser.builder()
                 .couponUserNo(1L)
                 .userNo(10)
-                .couponNo(1)
+//                .couponNo(1)
                 .used(false)
                 .created(current)
                 .updated(current)

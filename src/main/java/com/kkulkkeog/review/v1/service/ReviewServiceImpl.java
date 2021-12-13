@@ -35,9 +35,7 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public Mono<Void> deleteReview(long reviewNo) {
        return findReview(reviewNo)
-               .doOnNext(review -> {
-                   review.setDeleted(true);
-               })
+               .doOnNext(review -> review.setDeleted(true))
                .then();
     }
 }

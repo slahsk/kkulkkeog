@@ -11,17 +11,17 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 public class GetCouponsRequest {
-    private long memberNo;
+    private Long memberNo;
 
-    private long shopNo;
+    private Long shopNo;
 
     private String couponName;
 
     private String couponDescription;
 
-    private long minimumPrice;
+    private Long minimumPrice;
 
-    private long discountPrice;
+    private Long discountPrice;
 
     private CouponIssuer couponIssuer;
 

@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqUser")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userNo;
 
     private String email;

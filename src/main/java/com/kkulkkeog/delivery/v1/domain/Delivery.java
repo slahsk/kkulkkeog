@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class Delivery {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqDelivery")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long deliveryNo;
 
     private String deliveryAddress;

@@ -64,7 +64,7 @@ class OrderServiceImplTest {
 
         order = Order.builder()
                 .orderNo(1L)
-                .memberNo(12)
+                .userNo(12)
                 .paymentType(PaymentType.CARD)
                 .orderState(OrderState.CREATE)
                 .orderMenus(orderMenus)

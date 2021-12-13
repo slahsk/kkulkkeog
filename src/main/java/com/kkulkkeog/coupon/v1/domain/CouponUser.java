@@ -19,12 +19,13 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class CouponUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqCouponUser")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long couponUserNo;
 
     private long userNo;
 
-    private long couponNo;
+//    @Column(name = "coupon_no")
+//    private long couponNo;
 
     private boolean used;
 

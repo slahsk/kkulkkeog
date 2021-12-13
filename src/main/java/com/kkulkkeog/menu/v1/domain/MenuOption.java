@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class MenuOption {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqMenuOption")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long menuOptionNo;
 
     private String name;

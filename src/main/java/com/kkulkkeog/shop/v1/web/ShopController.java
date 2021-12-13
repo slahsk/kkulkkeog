@@ -30,7 +30,7 @@ public class ShopController {
     }
 
     @GetMapping("/shops/{shopNo}")
-    public Mono<ShopResponse> getShop(@PathVariable long shopNo){
+    public Mono<ShopResponse> getShop(@PathVariable Long shopNo){
         Mono<Shop> shop = shopService.findShop(shopNo);
 
         return shop.map(ShopMapper.INSTANCE::toShopResponse);
@@ -46,7 +46,7 @@ public class ShopController {
     }
 
     @DeleteMapping("/shops/{shopNo}")
-    public Mono<Void> deleteShop(@PathVariable long shopNo){
+    public Mono<Void> deleteShop(@PathVariable Long shopNo){
         return shopService.deleteShop(shopNo);
     }
 }

@@ -14,7 +14,7 @@ import javax.persistence.*;
 @ToString
 public class File {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqFile")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long no;
 
     private String name;

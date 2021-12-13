@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class Shop {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqShop")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long shopNo;
 
     private String shopName;

@@ -40,7 +40,7 @@ class UserControllerTest {
                         .id("khj").name("홍길동").email("test@mail.com").password("11111")
                         .build();
 
-        User user = User.builder().userNo(1L).password("11111").email("test@mail.com").name("홍길동").build();
+        User user = User.builder().userNo(1L).password("11111").email("test@mail.com").userName("홍길동").build();
 
         when(userRepository.save(any(User.class))).thenReturn(user);
 
@@ -58,7 +58,7 @@ class UserControllerTest {
     @DisplayName("사용자 탈퇴 - 성공")
     void testDeleteUser(){
         User user = User.builder().deleted(false).email("test@mail.com").password("11111")
-                        .name("홍길동").build();
+                        .userName("홍길동").build();
 
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));

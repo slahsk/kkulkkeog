@@ -24,7 +24,7 @@ public class DeliveryServiceImpl implements DeliveryService{
     public Mono<Delivery> findDelivery(long deliveryNo) {
         return Mono.just(deliveryNo)
                 .map(deliveryRepository::findById)
-                .map( delivery -> .orElseThrow( () -> new DeliveryNotFoundException(deliveryNo)));
+                .map( delivery -> delivery.orElseThrow( () -> new DeliveryNotFoundException(deliveryNo)));
 
     }
 

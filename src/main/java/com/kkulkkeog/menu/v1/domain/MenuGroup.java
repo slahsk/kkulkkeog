@@ -28,7 +28,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Builder
 public class MenuGroup {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqMenuGroup")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long menuGroupNo;
 
     private Long shopNo;

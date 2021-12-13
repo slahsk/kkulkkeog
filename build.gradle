@@ -30,7 +30,11 @@ allprojects {
     group = 'org.slahsk'
 }
 
-
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
 
 compileJava {
     options.compilerArgs += [
@@ -44,6 +48,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     implementation 'io.r2dbc:r2dbc-h2'
+    runtimeOnly 'mysql:mysql-connector-java'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'

@@ -15,10 +15,11 @@ import java.util.List;
 @ToString(exclude = {"menuGroup"})
 public class Menu {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqMenu")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long menuNo;
 
-    private long menuGroupNo;
+//    @Column(name = "menu_group_no")
+//    private long menuGroupNo;
 
     private String menuName;
 

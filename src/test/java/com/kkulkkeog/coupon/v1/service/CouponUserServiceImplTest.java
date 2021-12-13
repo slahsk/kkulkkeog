@@ -40,7 +40,7 @@ class CouponUserServiceImplTest {
     void setUp(){
        couponUser = CouponUser.builder()
                 .userNo(10)
-                .couponNo(1)
+//                .couponNo(1)
                 .build();
 
 

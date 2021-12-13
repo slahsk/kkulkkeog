@@ -16,7 +16,7 @@ import java.util.List;
 public class MenuOptionGroup {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqMenuOptionGroup")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long menuOptionGroupNo;
 
     private String menuOptionGroupName;

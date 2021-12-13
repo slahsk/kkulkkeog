@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Slf4j
 public class Coupon{
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqCoupon")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long couponNo;
 
     private long shopNo;

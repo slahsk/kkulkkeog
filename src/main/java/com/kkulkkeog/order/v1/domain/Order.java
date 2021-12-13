@@ -22,7 +22,7 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqOrder")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderNo;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")

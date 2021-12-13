@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class Review {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqReview")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewNo;
 
     private long shopNo;

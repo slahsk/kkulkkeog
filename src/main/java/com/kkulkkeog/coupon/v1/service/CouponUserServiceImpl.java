@@ -1,7 +1,6 @@
 package com.kkulkkeog.coupon.v1.service;
 
 import com.kkulkkeog.coupon.v1.common.exception.CouponIssuanceFailException;
-import com.kkulkkeog.coupon.v1.domain.Coupon;
 import com.kkulkkeog.coupon.v1.domain.CouponUser;
 import com.kkulkkeog.coupon.v1.repository.CouponUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +20,12 @@ public class CouponUserServiceImpl implements CouponUserService {
 
     @Override
     public Mono<CouponUser> saveCouponUser(CouponUser couponUser) {
-
+        //TODO c.getUserNo() -> c.getCouponNo() 변경
        return Mono.just(couponUser)
-               .flatMap( c -> couponService.findCoupon(c.getCouponNo()))
+               .flatMap( c -> couponService.findCoupon(c.getUserNo()))
                .doOnNext(coupon -> {
                    if(!coupon.isConponAvailable()){
-                       throw new CouponIssuanceFailException(couponUser.getCouponNo(), couponUser.getUserNo());
+                       throw new CouponIssuanceFailException(couponUser.getUserNo(), couponUser.getUserNo());
                    }
                })
                .then(Mono.just(couponUser))
