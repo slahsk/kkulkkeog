@@ -1,8 +1,11 @@
 package com.kkulkkeog.menu.v1.domain;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -18,26 +21,31 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long menuNo;
 
-//    @Column(name = "menu_group_no")
-//    private long menuGroupNo;
-
     private String menuName;
 
-    private long shopNo;
+    private Long shopNo;
 
-    private int price;
+    private Integer price;
 
     private String menuDescription;
 
-    private int menuOrder;
+    private Integer menuOrder;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "menu_group_no")
     private MenuGroup menuGroup;
 
-    private long fileNo;
+    private Long fileNo;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "menu")
     private List<MenuOptionGroup> menuOptions;
+
+    @CreatedDate
+    private LocalDateTime created;
+
+    @LastModifiedDate
+    private LocalDateTime updated;
+
+    private Boolean deleted;
 
 }

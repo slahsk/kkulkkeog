@@ -48,6 +48,6 @@ public class MenuGroup {
     @LastModifiedDate
     private LocalDateTime updated;
 
-    private boolean deleted;
+    private Boolean deleted;
 
 }

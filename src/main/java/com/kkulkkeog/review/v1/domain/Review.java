@@ -22,17 +22,17 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewNo;
 
-    private long shopNo;
+    private Long shopNo;
 
-    private long userNo;
+    private Long userNo;
 
-    private long fileNo;
+    private Long fileNo;
 
     private String userName;
 
     private String reviewMessage;
 
-    private float reviewScore;
+    private Float reviewScore;
 
     @CreatedDate
     private LocalDateTime created;
@@ -40,6 +40,6 @@ public class Review {
     @LastModifiedDate
     private LocalDateTime updated;
 
-    private boolean deleted;
+    private Boolean deleted;
 
 }

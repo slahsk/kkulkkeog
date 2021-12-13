@@ -37,6 +37,6 @@ public class User {
 
     private String defaultAddress;
 
-    private boolean deleted;
+    private Boolean deleted;
 
 }

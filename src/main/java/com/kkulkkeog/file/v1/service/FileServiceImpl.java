@@ -36,7 +36,7 @@ public class FileServiceImpl implements FileService{
                                     throw new FileNotCreateException(f.toString());
                                 }
 
-                                return f.getNo();
+                                return f.getFileNo();
                             });
                 });
     }

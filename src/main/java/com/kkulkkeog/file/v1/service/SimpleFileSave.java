@@ -20,7 +20,7 @@ public class SimpleFileSave implements FileSave{
 
     @Override
     public Mono<File> save(FilePart filePart, File file) {
-        Path path = Paths.get(fileProperty.getBasePath()).resolve(String.valueOf(file.getNo()));
+        Path path = Paths.get(fileProperty.getBasePath()).resolve(String.valueOf(file.getFileNo()));
         log.debug("SimpleFileSave: {}", path.getFileName());
         log.debug("SimpleFileSave: {}", path.toAbsolutePath());
 
