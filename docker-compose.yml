@@ -10,3 +10,4 @@ services:
       - MYSQL_USER=mysqluser
       - MYSQL_PASSWORD=mysqlpw
       - MYSQL_DATABASE=test
+
