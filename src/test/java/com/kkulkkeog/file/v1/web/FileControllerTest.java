@@ -57,7 +57,7 @@ class FileControllerTest {
         log.info("classPathResource filename: {}", classPathResource.getFilename());
 
         Mockito.when(fileProperty.getBasePath()).thenReturn("src/test/resources/upload/");
-        Mockito.when(fileRepository.save(Mockito.any(File.class))).thenReturn(File.builder().no(1L).build());
+        Mockito.when(fileRepository.save(Mockito.any(File.class))).thenReturn(File.builder().fileNo(1L).build());
 
         webClient.post()
                 .uri("/api/v1/files")

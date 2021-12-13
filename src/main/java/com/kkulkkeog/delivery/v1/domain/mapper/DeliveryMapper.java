@@ -6,6 +6,9 @@ import com.kkulkkeog.delivery.v1.api.web.PostDeliveryRequest;
 import com.kkulkkeog.delivery.v1.domain.Delivery;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
+
+import java.util.function.Function;
 
 @Mapper
 public interface DeliveryMapper {

@@ -11,6 +11,8 @@ import com.kkulkkeog.menu.v1.service.MenuGroupService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -23,11 +25,11 @@ public class MenuGroupController {
     private final MenuGroupService menuGroupService;
 
     @GetMapping("/menu-groups")
-    public Flux<MenuGroupResponse> getMenuGroups(GetMenuGroupsRequest getMenuGroupsRequest){
+    public  Mono<Page<MenuGroupResponse>> getMenuGroups(GetMenuGroupsRequest getMenuGroupsRequest, Pageable pageable){
         MenuGroup menuGroup = MenuGroupMapper.INSTANCE.toMenuGroup(getMenuGroupsRequest);
-        Flux<MenuGroup> menuGroups = menuGroupService.findAllMenuGroups(Example.of(menuGroup));
+        Mono<Page<MenuGroup>> menuGroups = menuGroupService.findAllMenuGroups(Example.of(menuGroup), pageable);
 
-        return menuGroups.map(MenuGroupMapper.INSTANCE::toMenuGroupResponse);
+        return menuGroups.map( mg -> mg.map(MenuGroupMapper.INSTANCE::toMenuGroupResponse));
     }
 
 

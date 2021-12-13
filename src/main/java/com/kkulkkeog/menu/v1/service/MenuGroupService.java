@@ -2,7 +2,8 @@ package com.kkulkkeog.menu.v1.service;
 
 import com.kkulkkeog.menu.v1.domain.MenuGroup;
 import org.springframework.data.domain.Example;
-import reactor.core.publisher.Flux;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Mono;
 
 public interface MenuGroupService {
@@ -12,7 +13,7 @@ public interface MenuGroupService {
 
     Mono<MenuGroup> findMenuGroup(long menuGroupNo);
 
-    Flux<MenuGroup> findAllMenuGroups(Example<MenuGroup> example);
+    Mono<Page<MenuGroup>> findAllMenuGroups(Example<MenuGroup> example, Pageable pageable);
 
     Mono<Void> deleteMenuGroup(long menuGroupNo);
 }

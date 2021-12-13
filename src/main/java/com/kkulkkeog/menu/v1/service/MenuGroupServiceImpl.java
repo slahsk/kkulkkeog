@@ -5,8 +5,9 @@ import com.kkulkkeog.menu.v1.domain.MenuGroup;
 import com.kkulkkeog.menu.v1.repository.MenuGroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -33,8 +34,8 @@ public class MenuGroupServiceImpl implements MenuGroupService{
     }
 
     @Override
-    public Flux<MenuGroup> findAllMenuGroups(Example<MenuGroup> example) {
-        return Flux.fromIterable(menuGroupRepository.findAll(example));
+    public Mono<Page<MenuGroup>> findAllMenuGroups(Example<MenuGroup> example, Pageable pageable) {
+        return Mono.just(menuGroupRepository.findAll(example,pageable));
     }
 
     @Override

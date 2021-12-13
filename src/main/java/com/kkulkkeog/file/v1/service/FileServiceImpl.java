@@ -24,7 +24,7 @@ public class FileServiceImpl implements FileService{
     public Mono<Long> saveFile(Mono<FilePart> filePartMono) {
         return filePartMono
                 .flatMap( filePart -> {
-                    File file = fileRepository.save(File.builder().name(filePart.filename()).build());
+                    File file = fileRepository.save(File.builder().fileName(filePart.filename()).build());
 
                     return fileSave.save(filePart, file)
                             .map(f -> {

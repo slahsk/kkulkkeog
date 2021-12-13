@@ -20,8 +20,9 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class DataSourceConfig {
 
+
     @Bean
-    @Profile("h2")
+    @Profile({"h2","test"})
     public DataSource h2DataSource() {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         return builder.setType(EmbeddedDatabaseType.H2).build();

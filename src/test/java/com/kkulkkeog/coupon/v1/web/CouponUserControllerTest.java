@@ -33,8 +33,8 @@ class CouponUserControllerTest {
         LocalDateTime current = LocalDateTime.now();
         couponUser = CouponUser.builder()
                 .couponUserNo(1L)
-                .userNo(10)
-                .couponNo(1)
+                .userNo(10L)
+                .couponNo(1L)
                 .used(false)
                 .created(current)
                 .updated(current)

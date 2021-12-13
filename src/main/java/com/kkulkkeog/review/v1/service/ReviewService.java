@@ -2,11 +2,12 @@ package com.kkulkkeog.review.v1.service;
 
 import com.kkulkkeog.review.v1.domain.Review;
 import org.springframework.data.domain.Example;
-import reactor.core.publisher.Flux;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Mono;
 
 public interface ReviewService {
-    Flux<Review> findAllReviews(Example<Review> example);
+    Mono<Page<Review>> findAllReviews(Example<Review> example, Pageable pageable);
 
     Mono<Review> findReview(long reviewNo);
 

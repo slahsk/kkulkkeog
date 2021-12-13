@@ -39,8 +39,8 @@ class CouponUserServiceImplTest {
     @BeforeEach
     void setUp(){
        couponUser = CouponUser.builder()
-                .userNo(10)
-                .couponNo(1)
+                .userNo(10L)
+                .couponNo(1L)
                 .build();
 
 

@@ -1,25 +1,23 @@
 spring:
   datasource:
-#    hikari:
-#      jdbc-url: mysql://localhost:3306/test?useSSL=false&characterEncoding=UTF-8
-#      username: root
-#      password: rootpassword
-#      driver-class-name: com.mysql.cj.jdbc.Driver
-    jdbc-url: jdbc:mysql://localhost:3306/test?useSSL=false&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: rootpassword
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
+    jdbc-url: jdbc:mysql://localhost:3306/test?useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
   jpa:
     hibernate:
-#      ddl-auto: update
-      ddl-auto: create
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
     show-sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    defer-datasource-initialization: true
+  sql:
+    init:
+      platform: mysql
+      mode: always
 logging:
   level:
     org.hibernate.SQL: info

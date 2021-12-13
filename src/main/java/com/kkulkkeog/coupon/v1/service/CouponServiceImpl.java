@@ -10,6 +10,8 @@ import com.kkulkkeog.coupon.v1.repository.CouponRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
@@ -17,7 +19,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -29,8 +30,9 @@ public class CouponServiceImpl implements CouponService {
     private final CouponRepository couponRepository;
 
     @Override
-    public Flux<Coupon> findAllCoupon(Example<Coupon> example){
-        return Flux.fromIterable(couponRepository.findAll(example));
+    public Mono<Page<Coupon>> findAllCoupon(Example<Coupon> example, Pageable pageable){
+        Page<Coupon> all = couponRepository.findAll(example, pageable);
+        return Mono.just(all);
     }
 
     @Override

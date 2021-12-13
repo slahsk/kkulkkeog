@@ -5,8 +5,9 @@ import com.kkulkkeog.delivery.v1.domain.Delivery;
 import com.kkulkkeog.delivery.v1.repository.DeliveryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -16,8 +17,8 @@ public class DeliveryServiceImpl implements DeliveryService{
 
 
     @Override
-    public Flux<Delivery> findAllDeliveries(Example<Delivery> example) {
-       return Flux.fromIterable(deliveryRepository.findAll(example));
+    public Mono<Page<Delivery>> findAllDeliveries(Example<Delivery> example, Pageable pageable) {
+       return Mono.just(deliveryRepository.findAll(example,pageable));
     }
 
     @Override

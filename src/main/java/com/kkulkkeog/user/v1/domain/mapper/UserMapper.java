@@ -1,5 +1,6 @@
 package com.kkulkkeog.user.v1.domain.mapper;
 
+import com.kkulkkeog.user.v1.api.web.GetUsersRequest;
 import com.kkulkkeog.user.v1.api.web.PutUserRequest;
 import com.kkulkkeog.user.v1.api.web.UserResponse;
 import com.kkulkkeog.user.v1.api.web.PostUserRequest;
@@ -16,4 +17,6 @@ public interface UserMapper {
     User toUser(Long no, PutUserRequest request);
 
     UserResponse toUserResponse(User member);
+
+    User toUser(GetUsersRequest getUsersRequest);
 }

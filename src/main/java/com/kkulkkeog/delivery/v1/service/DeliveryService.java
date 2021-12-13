@@ -2,11 +2,12 @@ package com.kkulkkeog.delivery.v1.service;
 
 import com.kkulkkeog.delivery.v1.domain.Delivery;
 import org.springframework.data.domain.Example;
-import reactor.core.publisher.Flux;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Mono;
 
 public interface DeliveryService {
-    Flux<Delivery> findAllDeliveries(Example<Delivery> example);
+    Mono<Page<Delivery>> findAllDeliveries(Example<Delivery> example, Pageable pageable);
 
     Mono<Delivery> findDelivery(long deliveryNo);
 

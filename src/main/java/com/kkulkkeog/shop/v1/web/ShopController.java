@@ -9,6 +9,8 @@ import com.kkulkkeog.shop.v1.domain.mapper.ShopMapper;
 import com.kkulkkeog.shop.v1.service.ShopService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,13 +22,12 @@ public class ShopController {
     private final ShopService shopService;
 
     @GetMapping("/shops")
-    public Flux<ShopResponse> getShops(GetShopsRequest getShopsRequest){
+    public   Mono<Page<ShopResponse>> getShops(GetShopsRequest getShopsRequest, Pageable pageable){
         Shop shop = ShopMapper.INSTANCE.toShop(getShopsRequest);
 
-        Flux<Shop> allCoupon = shopService.findAllShops(Example.of(shop));
+        Mono<Page<Shop>> couponPage = shopService.findAllShops(Example.of(shop), pageable);
 
-
-        return allCoupon.map(ShopMapper.INSTANCE::toShopResponse);
+        return couponPage.map(s -> s.map(ShopMapper.INSTANCE::toShopResponse));
     }
 
     @GetMapping("/shops/{shopNo}")

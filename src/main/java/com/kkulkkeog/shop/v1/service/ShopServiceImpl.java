@@ -5,8 +5,9 @@ import com.kkulkkeog.shop.v1.domain.Shop;
 import com.kkulkkeog.shop.v1.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -22,10 +23,8 @@ public class ShopServiceImpl implements ShopService{
     }
 
     @Override
-    public Flux<Shop> findAllShops(Example<Shop> example) {
-        return Mono.just(example)
-                .map(shopRepository::findAll)
-                .flatMapMany(Flux::fromIterable);
+    public Mono<Page<Shop>> findAllShops(Example<Shop> example, Pageable pageable) {
+        return Mono.just(shopRepository.findAll(example, pageable));
     }
 
     @Override

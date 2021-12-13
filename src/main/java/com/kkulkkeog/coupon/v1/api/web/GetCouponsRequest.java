@@ -28,4 +28,6 @@ public class GetCouponsRequest {
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
+
+    
 }

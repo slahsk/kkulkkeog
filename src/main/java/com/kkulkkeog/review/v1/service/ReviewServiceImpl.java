@@ -5,9 +5,10 @@ import com.kkulkkeog.review.v1.domain.Review;
 import com.kkulkkeog.review.v1.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -18,8 +19,8 @@ public class ReviewServiceImpl implements ReviewService{
 
 
     @Override
-    public Flux<Review> findAllReviews(Example<Review> example) {
-        return Flux.fromIterable(reviewRepository.findAll(example));
+    public Mono<Page<Review>> findAllReviews(Example<Review> example, Pageable pageable) {
+        return Mono.just(reviewRepository.findAll(example, pageable));
     }
 
     @Override

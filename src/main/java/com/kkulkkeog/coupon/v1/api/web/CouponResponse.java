@@ -5,7 +5,11 @@ import com.kkulkkeog.coupon.v1.domain.CouponType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 
 @Getter
@@ -13,33 +17,27 @@ import java.time.LocalDateTime;
 @ToString
 public class CouponResponse {
 
-    private long couponNo;
+    private Long couponNo;
 
-    private long memberNo;
+    private Long shopNo;
 
-    private long shopNo;
+    private String couponName;
 
-    private String title;
+    private String couponDescription;
 
-    private String message;
+    private Long minimumOrderPrice;
 
-    private long minimumPrice;
-
-    private long price;
+    private Long discountPrice;
 
     private CouponIssuer couponIssuer;
 
-    private CouponType couponType;
+    private LocalDateTime startDate;
 
-    private LocalDateTime startTime;
-
-    private LocalDateTime endTime;
-
-    private boolean availableCoupon;
-
-    private LocalDateTime usedTime;
+    private LocalDateTime endDate;
 
     private LocalDateTime created;
 
     private LocalDateTime updated;
+
+    private Boolean deleted;
 }

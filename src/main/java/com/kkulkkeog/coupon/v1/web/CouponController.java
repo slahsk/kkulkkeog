@@ -8,7 +8,10 @@ import com.kkulkkeog.coupon.v1.domain.Coupon;
 import com.kkulkkeog.coupon.v1.domain.mapper.CouponMapper;
 import com.kkulkkeog.coupon.v1.service.CouponService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,16 +19,17 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(Constant.API_V1)
+@Slf4j
 public class CouponController {
     private final CouponService couponService;
 
     @GetMapping("/coupons")
-    public Flux<CouponResponse> getCoupons(GetCouponsRequest getCouponsRequest){
+    public Mono<Page<CouponResponse>> getCoupons(GetCouponsRequest getCouponsRequest, Pageable pageable){
         Coupon coupon = CouponMapper.INSTANCE.toCoupon(getCouponsRequest);
 
-        Flux<Coupon> allCoupon = couponService.findAllCoupon(Example.of(coupon));
+        Mono<Page<Coupon>> couponPage = couponService.findAllCoupon(Example.of(coupon), pageable);
 
-        return allCoupon.map( CouponMapper.INSTANCE::toGetCouponResponse);
+        return couponPage.map(coupons -> coupons.map(CouponMapper.INSTANCE::toGetCouponResponse));
     }
 
     @GetMapping("/coupons/{couponNo}")

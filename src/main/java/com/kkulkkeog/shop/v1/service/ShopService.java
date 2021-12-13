@@ -2,14 +2,15 @@ package com.kkulkkeog.shop.v1.service;
 
 import com.kkulkkeog.shop.v1.domain.Shop;
 import org.springframework.data.domain.Example;
-import reactor.core.publisher.Flux;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Mono;
 
 public interface ShopService {
 
     Mono<Shop> findShop(long hopNo);
 
-    Flux<Shop> findAllShops(Example<Shop> example);
+    Mono<Page<Shop>> findAllShops(Example<Shop> example, Pageable pageable);
 
     Mono<Shop> saveShop(Shop shop);
 

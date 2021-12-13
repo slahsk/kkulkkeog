@@ -9,6 +9,8 @@ import com.kkulkkeog.review.v1.domain.mapper.ReviewMapper;
 import com.kkulkkeog.review.v1.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -21,13 +23,12 @@ public class ReviewController {
 
 
     @GetMapping("/reviews")
-    public Flux<ReviewResponse> getReviews(GetReviewRequest getReviewRequest){
+    public Mono<Page<ReviewResponse>> getReviews(GetReviewRequest getReviewRequest, Pageable pageable){
         Review review = ReviewMapper.INSTANCE.toReview(getReviewRequest);
 
-        Flux<Review> allReview = reviewService.findAllReviews(Example.of(review));
+        Mono<Page<Review>> reviewPage = reviewService.findAllReviews(Example.of(review), pageable);
 
-
-        return allReview.map(ReviewMapper.INSTANCE::toReviewResponse);
+        return reviewPage.map(r -> r.map(ReviewMapper.INSTANCE::toReviewResponse));
     }
 
     @GetMapping("/reviews/{reviewNo}")

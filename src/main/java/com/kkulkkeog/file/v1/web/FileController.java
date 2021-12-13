@@ -23,6 +23,6 @@ public class FileController {
 
 
         return fileService.saveFile(filePartMono)
-                .map( fileNo -> new PostFileResponse(fileNo));
+                .map(PostFileResponse::new);
     }
 }

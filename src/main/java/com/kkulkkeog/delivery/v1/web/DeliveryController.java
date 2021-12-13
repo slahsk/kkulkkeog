@@ -9,8 +9,9 @@ import com.kkulkkeog.delivery.v1.domain.mapper.DeliveryMapper;
 import com.kkulkkeog.delivery.v1.service.DeliveryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -20,13 +21,12 @@ public class DeliveryController {
     private final DeliveryService deliveryService;
 
     @GetMapping("/deliveries")
-    public Flux<DeliveryResponse> getDeliveries(GetDeliveryRequest getDeliveryRequest){
+    public Mono<Page<DeliveryResponse>> getDeliveries(GetDeliveryRequest getDeliveryRequest, Pageable pageable){
         Delivery delivery = DeliveryMapper.INSTANCE.toDelivery(getDeliveryRequest);
 
-        Flux<Delivery> allDeliveries = deliveryService.findAllDeliveries(Example.of(delivery));
+        Mono<Page<Delivery>> deliveries = deliveryService.findAllDeliveries(Example.of(delivery),pageable);
 
-
-        return allDeliveries.map(DeliveryMapper.INSTANCE::toDeliveryResponse);
+        return deliveries.map(d -> d.map(DeliveryMapper.INSTANCE::toDeliveryResponse));
     }
 
     @GetMapping("/deliveries/{deliveryNo}")

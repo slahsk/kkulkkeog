@@ -6,6 +6,9 @@ import com.kkulkkeog.user.v1.common.exception.UserDuplicateException;
 import com.kkulkkeog.user.v1.common.exception.UserNotFoundException;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -51,6 +54,11 @@ public class UserServiceImpl implements UserService {
         Optional<User> member = memberRepository.findById(no);
 
         return Mono.just(member.orElseThrow(() -> new UserNotFoundException(no)));
+    }
+
+    @Override
+    public Mono<Page<User>> findAllUsers(Example<User> example, Pageable pageable) {
+        return Mono.just(memberRepository.findAll(example, pageable));
     }
 
 
