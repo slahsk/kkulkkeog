@@ -1,5 +1,6 @@
 package com.kkulkkeog.coupon.v1.domain;
 
+import com.kkulkkeog.coupon.v1.api.CouponIssuer;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.CreatedDate;
@@ -49,7 +50,7 @@ public class Coupon{
 
     private Boolean deleted;
 
-    public boolean isConponAvailable(){
+    public boolean isCouponAvailable(){
         LocalDateTime now = LocalDateTime.now();
         boolean after = now.isAfter(startDate);
         boolean before = now.isBefore(endDate);

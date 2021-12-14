@@ -1,6 +1,6 @@
 package com.kkulkkeog.coupon.v1.api.web;
 
-import com.kkulkkeog.coupon.v1.domain.CouponIssuer;
+import com.kkulkkeog.coupon.v1.api.CouponIssuer;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

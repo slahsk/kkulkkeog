@@ -7,7 +7,9 @@ import lombok.Getter;
 @Builder
 public class PutUserResponse {
 
-    private String email;
+    private String userName;
 
-    private String name;
+    private String cellPhoneNumber;
+
+    private String defaultAddress;
 }

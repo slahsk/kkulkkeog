@@ -1,5 +1,6 @@
 package com.kkulkkeog.user.v1.service;
 
+import com.kkulkkeog.review.v1.common.exception.ReviewNotFoundException;
 import com.kkulkkeog.user.v1.domain.User;
 import com.kkulkkeog.user.v1.repository.UserRepository;
 import com.kkulkkeog.user.v1.common.exception.UserDuplicateException;
@@ -51,9 +52,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Mono<User> findUser(long no) {
-        Optional<User> member = memberRepository.findById(no);
-
-        return Mono.just(member.orElseThrow(() -> new UserNotFoundException(no)));
+        return Mono.just(memberRepository.findById(no).orElseThrow( () -> new UserNotFoundException(no)));
     }
 
     @Override

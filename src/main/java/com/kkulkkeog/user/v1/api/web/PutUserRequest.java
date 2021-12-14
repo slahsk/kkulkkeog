@@ -10,5 +10,9 @@ public class PutUserRequest {
 
     private String password;
 
-    private String name;
+    private String userName;
+
+    private String cellPhoneNumber;
+
+    private String defaultAddress;
 }

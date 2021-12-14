@@ -1,5 +1,6 @@
 package com.kkulkkeog.order.v1.domain;
 
+import com.kkulkkeog.order.v1.api.OrderState;
 import com.kkulkkeog.order.v1.api.message.PaymentType;
 import lombok.*;
 

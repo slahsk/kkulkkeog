@@ -30,7 +30,7 @@ class CouponTest {
     @Test
     @DisplayName("발행 가능한 쿠폰 검사")
     void testIsConponAvailable() {
-        assertTrue(coupon.isConponAvailable());
+        assertTrue(coupon.isCouponAvailable());
     }
 
 

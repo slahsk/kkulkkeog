@@ -2,8 +2,10 @@ package com.kkulkkeog.delivery.v1.service;
 
 import com.kkulkkeog.delivery.v1.common.exception.DeliveryNotFoundException;
 import com.kkulkkeog.delivery.v1.domain.Delivery;
+import com.kkulkkeog.delivery.v1.api.DeliveryState;
 import com.kkulkkeog.delivery.v1.repository.DeliveryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,7 @@ import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DeliveryServiceImpl implements DeliveryService{
     private final DeliveryRepository deliveryRepository;
 
@@ -33,6 +36,16 @@ public class DeliveryServiceImpl implements DeliveryService{
     public Mono<Delivery> saveDelivery(Delivery delivery) {
         return Mono.just(delivery)
                 .map(deliveryRepository::save);
+    }
+
+    @Override
+    public Mono<Delivery> updateDeliveryState(long deliveryNo, DeliveryState deliveryState) {
+        return findDelivery(deliveryNo)
+                .map(delivery -> {
+                    log.debug("updateDeliveryState - deliveryNo: {}, state: {} -> {}", delivery.getDeliveryNo(),delivery.getDeliveryState(), deliveryState);
+                    delivery.setDeliveryState(deliveryState);
+                    return delivery;
+                });
     }
 
     @Override

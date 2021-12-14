@@ -1,4 +1,4 @@
-package com.kkulkkeog.order.v1.domain;
+package com.kkulkkeog.order.v1.api;
 
 public enum OrderState {
     CREATE,

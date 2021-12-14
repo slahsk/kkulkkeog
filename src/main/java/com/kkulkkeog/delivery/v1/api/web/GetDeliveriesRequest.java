@@ -9,19 +9,10 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class PostDeliveryRequest {
-    private String deliveryAddress;
-
-    private String deliveryDescription;
-
-    private Long orderNo;
-
+public class GetDeliveriesRequest {
     private Long shopNo;
-
-    private Long memberNo;
 
     private DeliveryType deliveryType;
 
     private DeliveryState deliveryState;
-
 }

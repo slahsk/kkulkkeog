@@ -9,7 +9,7 @@ import com.kkulkkeog.order.v1.api.message.PaymentType;
 import com.kkulkkeog.order.v1.domain.Order;
 import com.kkulkkeog.order.v1.domain.OrderCoupon;
 import com.kkulkkeog.order.v1.domain.OrderMenu;
-import com.kkulkkeog.order.v1.domain.OrderState;
+import com.kkulkkeog.order.v1.api.OrderState;
 import com.kkulkkeog.order.v1.repository.OrderRepository;
 import com.kkulkkeog.payment.v1.common.exception.PaymentFailException;
 import com.kkulkkeog.payment.v1.api.message.OrderPayment;

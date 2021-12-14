@@ -1,5 +1,7 @@
 package com.kkulkkeog.delivery.v1.domain;
 
+import com.kkulkkeog.delivery.v1.api.DeliveryState;
+import com.kkulkkeog.delivery.v1.api.DeliveryType;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -30,6 +32,8 @@ public class Delivery {
     private Long orderNo;
 
     private Long memberNo;
+
+    private Long shopNo;
 
     @Enumerated(EnumType.STRING)
     private DeliveryType deliveryType;

@@ -1,5 +1,6 @@
 package com.kkulkkeog.user.v1.domain;
 
+import com.kkulkkeog.user.v1.api.UserLoginType;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -29,6 +30,8 @@ public class User {
 
     private String userName;
 
+    private String cellPhoneNumber;
+
     @CreatedDate
     private LocalDateTime created;
 
@@ -36,6 +39,9 @@ public class User {
     private LocalDateTime updated;
 
     private String defaultAddress;
+
+    @Enumerated(EnumType.STRING)
+    private UserLoginType userLoginType;
 
     private Boolean deleted;
 

@@ -9,7 +9,7 @@ import com.kkulkkeog.coupon.v1.common.exception.CouponValidationException;
 import com.kkulkkeog.menu.v1.common.exception.MenuValidationException;
 import com.kkulkkeog.order.v1.common.exception.OrderNotFoundException;
 import com.kkulkkeog.order.v1.domain.Order;
-import com.kkulkkeog.order.v1.domain.OrderState;
+import com.kkulkkeog.order.v1.api.OrderState;
 import com.kkulkkeog.order.v1.domain.mapper.OrderMapper;
 import com.kkulkkeog.order.v1.repository.OrderRepository;
 import com.kkulkkeog.payment.v1.common.exception.PaymentFailException;
