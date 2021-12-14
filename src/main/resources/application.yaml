@@ -11,7 +11,11 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
-
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
 logging:
   level:
     org.hibernate.SQL: info

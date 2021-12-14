@@ -32,6 +32,10 @@ public class Review {
 
     private String reviewMessage;
 
+    private String reviewComment;
+
+    private LocalDateTime reviewCommentTime;
+
     private Float reviewScore;
 
     @CreatedDate
