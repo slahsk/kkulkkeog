@@ -38,7 +38,7 @@ class UserControllerTest {
     @DisplayName("사용자 저장 - 성공")
     void testPostUser(){
         PostUserRequest request = PostUserRequest.builder()
-                        .id("khj").name("홍길동").email("test@mail.com").password("11111")
+                        .userName("홍길동").email("test@mail.com").password("11111")
                         .build();
 
         User user = User.builder().userNo(1L).password("11111").email("test@mail.com").userName("홍길동").build();
