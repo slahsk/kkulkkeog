@@ -15,5 +15,7 @@ public interface UserService {
 
     Mono<User> findUser(long no);
 
+    Mono<User> findUserByEmail(String email);
+
     Mono<Page<User>> findAllUsers(Example<User> example, Pageable pageable);
 }

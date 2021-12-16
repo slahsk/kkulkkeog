@@ -4,6 +4,7 @@ import com.kkulkkeog.user.v1.api.web.PostUserRequest;
 import com.kkulkkeog.user.v1.domain.User;
 import com.kkulkkeog.user.v1.repository.UserRepository;
 import com.kkulkkeog.user.v1.service.UserServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,8 +12,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -20,6 +23,8 @@ import org.springframework.web.reactive.function.BodyInserters;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.springSecurity;
+import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.basicAuthentication;
 
 @ExtendWith(SpringExtension.class)
 @WebFluxTest(controllers = { UserController.class })
@@ -33,9 +38,23 @@ class UserControllerTest {
     @MockBean
     UserRepository userRepository;
 
+//    @Autowired
+//    ApplicationContext context;
+
+//    @BeforeEach
+//    public void setup() {
+//        this.webClient = WebTestClient
+//                .bindToApplicationContext(this.context)
+//                // add Spring Security test Support
+//                .apply(springSecurity())
+//                .configureClient()
+//                .filter(basicAuthentication())
+//                .build();
+//    }
 
     @Test
     @DisplayName("사용자 저장 - 성공")
+    @WithMockUser(roles = "USER")
     void testPostUser(){
         PostUserRequest request = PostUserRequest.builder()
                         .userName("홍길동").email("test@mail.com").password("11111")

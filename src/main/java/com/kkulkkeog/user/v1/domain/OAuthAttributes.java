@@ -1,5 +1,6 @@
 package com.kkulkkeog.user.v1.domain;
 
+import com.kkulkkeog.user.v1.common.exception.RegistrationNotFoundException;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -7,11 +8,11 @@ import java.util.Map;
 
 @Getter
 public class OAuthAttributes {
-    private Map<String, Object> attributes;
-    private String nameAttributeKey;
-    private String name;
-    private String email;
-    private String picture;
+    private final Map<String, Object> attributes;
+    private final String nameAttributeKey;
+    private final String name;
+    private final String email;
+    private final String picture;
 
     @Builder
     public OAuthAttributes(Map<String, Object> attributes,
@@ -24,11 +25,17 @@ public class OAuthAttributes {
         this.picture = picture;
     }
 
-    public static OAuthAttributes of(String registrationId,
-                                     String userNameAttributeName,
-                                     Map<String, Object> attributes) {
-        return ofGoogle(userNameAttributeName, attributes);
+    public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
+
+        if ("google".equals(registrationId)) {
+            return ofGoogle(userNameAttributeName, attributes);
+        }
+
+        throw new RegistrationNotFoundException(registrationId);
+
     }
+
+
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName,
                                             Map<String, Object> attributes) {
@@ -38,6 +45,14 @@ public class OAuthAttributes {
                 .picture((String) attributes.get("picture"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
+                .build();
+    }
+
+    public User toUser(){
+        return User.builder()
+                .userName(this.name)
+                .email(this.email)
+                .userRole(UserRole.USER)
                 .build();
     }
 

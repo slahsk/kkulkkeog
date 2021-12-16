@@ -7,6 +7,7 @@ import com.kkulkkeog.user.v1.common.exception.UserDuplicateException;
 import com.kkulkkeog.user.v1.common.exception.UserNotFoundException;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 @Transactional
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository memberRepository;
 
@@ -53,6 +55,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<User> findUser(long no) {
         return Mono.just(memberRepository.findById(no).orElseThrow( () -> new UserNotFoundException(no)));
+    }
+
+    @Override
+    public Mono<User> findUserByEmail(String email) {
+        return Mono.just(email)
+                .map(s -> memberRepository.findByEmail(s))
+                .map(user ->{
+                    log.debug("findUserByEmail: {}", user);
+                   return user.orElseThrow( () -> new UserNotFoundException(email));
+                });
     }
 
     @Override

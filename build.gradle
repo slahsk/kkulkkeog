@@ -67,6 +67,7 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct}"
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBinding}"
 
+    testImplementation "org.springframework.security:spring-security-test"
 
 }
 

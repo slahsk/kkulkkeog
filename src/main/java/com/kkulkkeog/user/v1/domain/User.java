@@ -43,6 +43,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserLoginType userLoginType;
 
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
+
     private Boolean deleted;
+
 
 }
