@@ -16,6 +16,9 @@ spring:
       client:
         registration:
           google:
+            client-id: "726245470910-kdis2dc6jsq4o12sp9tj72r6s9gees56.apps.googleusercontent.com"
+            client-secret: "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"
+            scope: "profile,email"
 logging:
   level:
     org.hibernate.SQL: info

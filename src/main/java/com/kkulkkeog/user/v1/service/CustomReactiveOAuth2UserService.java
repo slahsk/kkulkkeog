@@ -17,14 +17,13 @@ import java.util.Collections;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-
 public class CustomReactiveOAuth2UserService implements ReactiveOAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     @Override
     public Mono<OAuth2User> loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        log.debug("getAccessToken",userRequest.getAccessToken());
-        log.debug("getAdditionalParameters",userRequest.getAdditionalParameters());
-        log.debug("getClientRegistration",userRequest.getClientRegistration());
+        log.debug("getAccessToken: {}",userRequest.getAccessToken());
+        log.debug("getAdditionalParameters: {}",userRequest.getAdditionalParameters());
+        log.debug("getClientRegistration: {}",userRequest.getClientRegistration());
 
 
         OAuth2UserService delegate = new DefaultOAuth2UserService();
