@@ -10,11 +10,17 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.springSecurity;
+import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.basicAuthentication;
 
 @ExtendWith(SpringExtension.class)
 @WebFluxTest(controllers = { CouponUserController.class })
@@ -23,10 +29,13 @@ class CouponUserControllerTest {
     @MockBean
     CouponUserService couponUserService;
 
-    @Autowired
     WebTestClient webClient;
 
     CouponUser couponUser = null;
+
+    @Autowired
+    ApplicationContext context;
+
 
     @BeforeEach
     void setUp(){
@@ -40,16 +49,26 @@ class CouponUserControllerTest {
                 .updated(current)
                 .deleted(false)
                 .build();
+
+        this.webClient = WebTestClient
+                .bindToApplicationContext(this.context)
+                .apply(springSecurity())
+                .configureClient()
+                .filter(basicAuthentication())
+                .build();
     }
 
 
     @Test
+    @WithMockUser
     @DisplayName("사용자 쿠폰 발행 - 성공")
     void testPostCouponUser() {
 
         Mockito.when(couponUserService.saveCouponUser(Mockito.any(CouponUser.class))).thenReturn(Mono.just(couponUser));
 
-        webClient.post()
+        webClient
+                .mutateWith(csrf())
+                .post()
                 .uri("/api/v1/coupons/11/users/10")
                 .exchange()
                 .expectStatus().isOk()

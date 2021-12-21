@@ -54,6 +54,8 @@ public class SecurityConfig {
                 .logout()
                 .and().exceptionHandling()
                 .accessDeniedHandler((exchange, exception) -> Mono.error(new RuntimeException("accessDeniedHandler")))
-                .and().build();
+                .and()
+                .csrf().disable()
+                .build();
     }
 }
