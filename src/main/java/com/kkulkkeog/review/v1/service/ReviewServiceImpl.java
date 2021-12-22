@@ -25,12 +25,15 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public Mono<Review> findReview(long reviewNo) {
-        return Mono.just(reviewRepository.findById(reviewNo).orElseThrow( () -> new ReviewNotFoundException(reviewNo)));
+       return Mono.just(reviewNo)
+                .map(reviewRepository::findById)
+                .map(review -> review.orElseThrow( () -> new ReviewNotFoundException(reviewNo)));
     }
 
     @Override
     public Mono<Review> saveReview(Review review) {
-        return Mono.just(reviewRepository.save(review));
+        return Mono.just(review)
+                .map(reviewRepository::save);
     }
 
     @Override

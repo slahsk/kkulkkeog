@@ -6,6 +6,7 @@ import com.kkulkkeog.coupon.v1.domain.Coupon;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface CouponService {
 
     Mono<Page<Coupon>> findAllCoupon(Example<Coupon> example, Pageable pageable);
 
-    Mono<Boolean> validationOrderCoupon(List<CouponValidation> couponValidations);
+    Flux<Coupon> validationOrderCoupon(List<CouponValidation> couponValidations);
 
     Mono<Long> calculatePrice(CouponCalculatePrice couponCalculatePrice);
 

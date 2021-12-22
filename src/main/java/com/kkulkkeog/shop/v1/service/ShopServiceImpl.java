@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ public class ShopServiceImpl implements ShopService{
     @Override
     public Mono<Shop> findShop(long shopNo) {
          return Mono.just(shopNo)
+                 .publishOn(Schedulers.boundedElastic())
                  .map(shopRepository::findById)
                  .map(shop -> shop.orElseThrow(() -> new ShopNotFoundException(shopNo)));
     }
@@ -29,7 +31,9 @@ public class ShopServiceImpl implements ShopService{
 
     @Override
     public Mono<Shop> saveShop(Shop shop) {
-        return Mono.just(shop).map(shopRepository::save);
+        return Mono.just(shop)
+                .publishOn(Schedulers.boundedElastic())
+                .map(shopRepository::save);
     }
 
     @Override
@@ -41,6 +45,8 @@ public class ShopServiceImpl implements ShopService{
 
     @Override
     public Mono<Shop> updateShop(Shop shop) {
-       return Mono.just(shop).map(shopRepository::save);
+       return Mono.just(shop)
+               .publishOn(Schedulers.boundedElastic())
+               .map(shopRepository::save);
     }
 }

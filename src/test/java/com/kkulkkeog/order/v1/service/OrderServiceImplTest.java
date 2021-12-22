@@ -2,6 +2,7 @@ package com.kkulkkeog.order.v1.service;
 
 import com.kkulkkeog.coupon.v1.common.exception.CouponValidationException;
 import com.kkulkkeog.coupon.v1.api.message.CouponCalculatePrice;
+import com.kkulkkeog.coupon.v1.domain.Coupon;
 import com.kkulkkeog.coupon.v1.service.CouponService;
 import com.kkulkkeog.menu.v1.common.exception.MenuValidationException;
 import com.kkulkkeog.menu.v1.service.MenuService;
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -80,7 +82,7 @@ class OrderServiceImplTest {
     @DisplayName("주문 생성 - 성공")
     void testSaveOrderSuccess(){
         when(menuService.validationOrderMenu(anyList())).thenReturn(Mono.just(true));
-        when(couponService.validationOrderCoupon(anyList())).thenReturn(Mono.just(true));
+        when(couponService.validationOrderCoupon(anyList())).thenReturn(Flux.just(new Coupon()));
         when(couponService.calculatePrice(any(CouponCalculatePrice.class))).thenReturn(Mono.just(2000L));
         when(paymentService.payment(any(OrderPayment.class))).thenReturn(Mono.just(true));
         when(orderRepository.save(any(Order.class))).thenReturn(order);
@@ -115,7 +117,7 @@ class OrderServiceImplTest {
     @DisplayName("주문 생성 - 실패(CouponValidationException)")
     void testSaveOrderCouponValidationException(){
         when(menuService.validationOrderMenu(anyList())).thenReturn(Mono.just(true));
-        when(couponService.validationOrderCoupon(anyList())).thenReturn(Mono.error(new CouponValidationException("test")));
+        when(couponService.validationOrderCoupon(anyList())).thenReturn(Flux.error(new CouponValidationException("test")));
 
         when(orderRepository.save(any(Order.class))).thenReturn(order);
 
@@ -132,7 +134,7 @@ class OrderServiceImplTest {
     @DisplayName("주문 생성 - 실패(PaymentFailException)")
     void testSaveOrderPaymentFailException(){
         when(menuService.validationOrderMenu(anyList())).thenReturn(Mono.just(true));
-        when(couponService.validationOrderCoupon(anyList())).thenReturn(Mono.just(true));
+        when(couponService.validationOrderCoupon(anyList())).thenReturn(Flux.just(new Coupon()));
         when(couponService.calculatePrice(any(CouponCalculatePrice.class))).thenReturn(Mono.just(2000L));
         when(paymentService.payment(any(OrderPayment.class))).thenReturn(Mono.error(new PaymentFailException("test")));
         when(orderRepository.save(any(Order.class))).thenReturn(order);

@@ -18,6 +18,7 @@ import com.kkulkkeog.payment.v1.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.List;
 
@@ -39,44 +40,54 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public Mono<Order> saveOrder(final Order order) {
 
-        return Mono.just(order).flatMap(orderMono -> {
-            Order data = orderRepository.save(orderMono);
-            List<MenuValidation> menuValidations = OrderMapper.INSTANCE.toMenuValidations(orderMono.getOrderMenus());
+        return Mono.just(order)
+                .flatMap(orderMono -> {
+                    Order data = orderRepository.save(orderMono);
+                    List<MenuValidation> menuValidations = OrderMapper.INSTANCE.toMenuValidations(orderMono.getOrderMenus());
 
-            return menuService.validationOrderMenu(menuValidations)
-                    .flatMap( b -> {
-                        data.setOrderState(OrderState.MENU_VALIDATION_SUCCESS);
-                        List<CouponValidation> couponValidations = OrderMapper.INSTANCE.toCouponValidations(orderMono.getOrderCoupons());
-                        return couponService.validationOrderCoupon(couponValidations);
-                    })
-                    .flatMap( b -> {
-                        data.setOrderState(OrderState.COUPON_VALIDATION_SUCCESS);
-                        CouponCalculatePrice couponCalculatePrice = OrderMapper.INSTANCE.toCouponCalculatePrice(orderMono);
+                    return menuService.validationOrderMenu(menuValidations)
+                            .flatMap( b -> {
+                                data.setOrderState(OrderState.MENU_VALIDATION_SUCCESS);
+                                List<CouponValidation> couponValidations = OrderMapper.INSTANCE.toCouponValidations(orderMono.getOrderCoupons());
+                                return couponService.validationOrderCoupon(couponValidations)
+                                        .doOnNext(coupon -> {
+                                            data.setOrderState(OrderState.COUPON_VALIDATION_SUCCESS);
+                                        })
+                                        .then();
+                            })
+                            .then(Mono.fromSupplier(() -> {
+                                CouponCalculatePrice couponCalculatePrice = OrderMapper.INSTANCE.toCouponCalculatePrice(orderMono);
 
-                        return couponService.calculatePrice(couponCalculatePrice);
-                    }).flatMap( b -> {
-                        data.setOrderState(OrderState.COUPON_CALCULATE_SUCCESS);
-                        data.setResultPrice(b);
-
-                        OrderPayment orderPayment = OrderMapper.INSTANCE.toOrderPayment(data);
-                        return  paymentService.payment(orderPayment);
-                    })
-                    .map( b -> {
-                        data.setOrderState(OrderState.ORDER_SUCCESS);
-                        return data;
-                    })
-                    .doOnError(MenuValidationException.class, e -> {
-                        data.setOrderState(OrderState.MENU_VALIDATION_FAIL);
-                        orderRepository.save(data);
-                    })
-                    .doOnError(CouponValidationException.class, e -> {
-                        data.setOrderState(OrderState.COUPON_VALIDATION_FAIL);
-                        orderRepository.save(data);
-                    })
-                    .doOnError(PaymentFailException.class, e -> {
-                        data.setOrderState(OrderState.PAYMENT_FAIL);
-                        orderRepository.save(data);
-                    });
+                                return couponService.calculatePrice(couponCalculatePrice)
+                                        .doOnNext(aLong -> {
+                                            data.setResultPrice(aLong);
+                                            data.setOrderState(OrderState.COUPON_CALCULATE_SUCCESS);
+                                        })
+                                        .then();
+                            }))
+                            .then( Mono.fromSupplier(() -> {
+                                OrderPayment orderPayment = OrderMapper.INSTANCE.toOrderPayment(data);
+                                return  paymentService.payment(orderPayment)
+                                        .doOnNext(aBoolean -> {
+                                            data.setOrderState(OrderState.ORDER_SUCCESS);
+                                        })
+                                        .then();
+                            }))
+                            .then( Mono.fromSupplier(() -> {
+                                return data;
+                            }))
+                            .doOnError(MenuValidationException.class, e -> {
+                                data.setOrderState(OrderState.MENU_VALIDATION_FAIL);
+                                orderRepository.save(data);
+                            })
+                            .doOnError(CouponValidationException.class, e -> {
+                                data.setOrderState(OrderState.COUPON_VALIDATION_FAIL);
+                                orderRepository.save(data);
+                            })
+                            .doOnError(PaymentFailException.class, e -> {
+                                data.setOrderState(OrderState.PAYMENT_FAIL);
+                                orderRepository.save(data);
+                            });
         });
 
     }

@@ -2,7 +2,6 @@ package com.kkulkkeog.coupon.v1.service;
 
 
 import com.kkulkkeog.coupon.v1.common.exception.CouponNotFoundException;
-import com.kkulkkeog.coupon.v1.common.exception.CouponValidationException;
 import com.kkulkkeog.coupon.v1.api.message.CouponCalculatePrice;
 import com.kkulkkeog.coupon.v1.api.message.CouponValidation;
 import com.kkulkkeog.coupon.v1.domain.Coupon;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.List;
 import java.util.Map;
@@ -31,13 +31,13 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public Mono<Page<Coupon>> findAllCoupon(Example<Coupon> example, Pageable pageable){
-        Page<Coupon> all = couponRepository.findAll(example, pageable);
-        return Mono.just(all);
+        return Mono.just(couponRepository.findAll(example, pageable));
     }
 
     @Override
     public Mono<Coupon> saveCoupon(Coupon coupon) {
-        return Mono.just(couponRepository.save(coupon));
+        return Mono.just(coupon)
+                .map(couponRepository::save);
     }
 
     @Override
@@ -55,37 +55,37 @@ public class CouponServiceImpl implements CouponService {
 
 
     @Override
-    public Mono<Boolean> validationOrderCoupon(List<CouponValidation> couponValidations) {
+    public Flux<Coupon> validationOrderCoupon(List<CouponValidation> couponValidations) {
         return Flux.fromIterable(couponValidations)
                 .flatMap( couponValidation -> {
-                    List<Long> couponNos = couponValidations.stream().map(CouponValidation::getCouponNo).collect(Collectors.toList());
-                    Map<Long, Coupon> couponMap = couponRepository.findAllById(couponNos).stream().collect(Collectors.toMap(Coupon::getCouponNo, Function.identity()));
+                    List<Long> couponNos = couponValidations
+                            .stream()
+                            .map(CouponValidation::getCouponNo)
+                            .collect(Collectors.toList());
 
-                    Coupon coupon = couponMap.get(couponValidation.getCouponNo());
-
+                    List<Coupon> allById = couponRepository.findAllById(couponNos);
                     //TODO 쿠폰 검사
-                    boolean orderAvailableCoupon = true;
-                   return Mono.just(orderAvailableCoupon);
-                })
-                .filter( b -> b)
-                .as(booleanFlux -> booleanFlux.count().map(i ->{
-                    log.debug("validationOrderCoupon - count: {}, list size:{}",i, couponValidations.size());
-                    if( i != couponValidations.size()){
-                        throw new CouponValidationException(couponValidations.toString());
-                    }
 
-                    return true;
-                }));
+
+//                                        if( i != couponValidations.size()){
+//                                            throw new CouponValidationException(couponValidations.toString());
+//                                        }
+
+                    return Flux.fromIterable(allById);
+                });
     }
+
 
     @Override
     public Mono<Long> calculatePrice(CouponCalculatePrice couponCalculatePrice) {
-        return Mono.just(couponCalculatePrice).map( o -> {
-            long sum = couponRepository.findAllById(couponCalculatePrice.getCouponNos())
-                    .stream()
-                    .mapToLong(Coupon::getDiscountPrice).sum();
-            return  couponCalculatePrice.getOrderTotalPrice() - sum;
-        });
+        return Mono.just(couponCalculatePrice)
+                .publishOn(Schedulers.boundedElastic())
+                .map( o -> {
+                    long sum = couponRepository.findAllById(couponCalculatePrice.getCouponNos())
+                            .stream()
+                            .mapToLong(Coupon::getDiscountPrice).sum();
+                    return  couponCalculatePrice.getOrderTotalPrice() - sum;
+                });
     }
 
 

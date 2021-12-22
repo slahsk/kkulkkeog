@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -42,10 +43,10 @@ class CouponServiceImplTest {
 
         when(couponRepository.findAllById(anyList())).thenReturn(List.of(coupon1, coupon2));
 
-        Mono<Boolean> orderValidation = couponService.validationOrderCoupon(List.of(couponValidation1, couponValidation2));
+        Flux<Coupon> couponFlux = couponService.validationOrderCoupon(List.of(couponValidation1, couponValidation2));
 
-        StepVerifier.create(orderValidation)
-                .expectNext(true)
+        StepVerifier.create(couponFlux)
+                .expectNextCount(2)
                 .verifyComplete();
     }
 
