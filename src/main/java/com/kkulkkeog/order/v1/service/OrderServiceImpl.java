@@ -16,6 +16,7 @@ import com.kkulkkeog.payment.v1.common.exception.PaymentFailException;
 import com.kkulkkeog.payment.v1.api.message.OrderPayment;
 import com.kkulkkeog.payment.v1.service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -24,6 +25,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final PaymentService paymentService;
@@ -51,30 +53,32 @@ public class OrderServiceImpl implements OrderService{
                                 List<CouponValidation> couponValidations = OrderMapper.INSTANCE.toCouponValidations(orderMono.getOrderCoupons());
                                 return couponService.validationOrderCoupon(couponValidations)
                                         .doOnNext(coupon -> {
+                                            log.debug("COUPON_VALIDATION_SUCCESS");
                                             data.setOrderState(OrderState.COUPON_VALIDATION_SUCCESS);
                                         })
                                         .then();
                             })
-                            .then(Mono.fromSupplier(() -> {
+                            .then(Mono.defer(() -> {
                                 CouponCalculatePrice couponCalculatePrice = OrderMapper.INSTANCE.toCouponCalculatePrice(orderMono);
 
                                 return couponService.calculatePrice(couponCalculatePrice)
                                         .doOnNext(aLong -> {
+                                            log.debug("COUPON_CALCULATE_SUCCESS");
+
                                             data.setResultPrice(aLong);
                                             data.setOrderState(OrderState.COUPON_CALCULATE_SUCCESS);
                                         })
                                         .then();
                             }))
-                            .then( Mono.fromSupplier(() -> {
+                            .then( Mono.defer(() -> {
                                 OrderPayment orderPayment = OrderMapper.INSTANCE.toOrderPayment(data);
                                 return  paymentService.payment(orderPayment)
                                         .doOnNext(aBoolean -> {
+                                            log.debug("ORDER_SUCCESS");
+
                                             data.setOrderState(OrderState.ORDER_SUCCESS);
                                         })
-                                        .then();
-                            }))
-                            .then( Mono.fromSupplier(() -> {
-                                return data;
+                                        .then(Mono.just(data));
                             }))
                             .doOnError(MenuValidationException.class, e -> {
                                 data.setOrderState(OrderState.MENU_VALIDATION_FAIL);

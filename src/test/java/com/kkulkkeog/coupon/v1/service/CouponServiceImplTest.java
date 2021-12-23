@@ -1,6 +1,5 @@
 package com.kkulkkeog.coupon.v1.service;
 
-import com.kkulkkeog.coupon.v1.common.exception.CouponValidationException;
 import com.kkulkkeog.coupon.v1.api.message.CouponCalculatePrice;
 import com.kkulkkeog.coupon.v1.api.message.CouponValidation;
 import com.kkulkkeog.coupon.v1.domain.Coupon;
@@ -46,7 +45,7 @@ class CouponServiceImplTest {
         Flux<Coupon> couponFlux = couponService.validationOrderCoupon(List.of(couponValidation1, couponValidation2));
 
         StepVerifier.create(couponFlux)
-                .expectNextCount(2)
+                .expectNextCount(2L)
                 .verifyComplete();
     }
 

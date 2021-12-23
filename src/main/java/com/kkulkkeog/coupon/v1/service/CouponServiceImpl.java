@@ -57,13 +57,14 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public Flux<Coupon> validationOrderCoupon(List<CouponValidation> couponValidations) {
         return Flux.fromIterable(couponValidations)
-                .flatMap( couponValidation -> {
+                .as( couponValidation -> {
                     List<Long> couponNos = couponValidations
                             .stream()
                             .map(CouponValidation::getCouponNo)
                             .collect(Collectors.toList());
 
-                    List<Coupon> allById = couponRepository.findAllById(couponNos);
+                    List<Coupon> coupons = couponRepository.findAllById(couponNos);
+                    log.debug("validationOrderCoupon : {}",coupons);
                     //TODO 쿠폰 검사
 
 
@@ -71,7 +72,7 @@ public class CouponServiceImpl implements CouponService {
 //                                            throw new CouponValidationException(couponValidations.toString());
 //                                        }
 
-                    return Flux.fromIterable(allById);
+                    return Flux.fromIterable(coupons);
                 });
     }
 
