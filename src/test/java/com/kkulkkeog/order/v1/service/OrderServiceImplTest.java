@@ -83,7 +83,7 @@ class OrderServiceImplTest {
     void testSaveOrderSuccess(){
         when(menuService.validationOrderMenu(anyList())).thenReturn(Mono.just(true));
         when(couponService.validationOrderCoupon(anyList())).thenReturn(Flux.just(new Coupon()));
-        when(couponService.calculatePrice(any(CouponCalculatePrice.class))).thenReturn(Mono.just(2000L));
+        when(couponService.calculatePriceCoupon(any(CouponCalculatePrice.class))).thenReturn(Mono.just(2000L));
         when(paymentService.payment(any(OrderPayment.class))).thenReturn(Mono.just(true));
         when(orderRepository.save(any(Order.class))).thenReturn(order);
 
@@ -135,7 +135,7 @@ class OrderServiceImplTest {
     void testSaveOrderPaymentFailException(){
         when(menuService.validationOrderMenu(anyList())).thenReturn(Mono.just(true));
         when(couponService.validationOrderCoupon(anyList())).thenReturn(Flux.just(new Coupon()));
-        when(couponService.calculatePrice(any(CouponCalculatePrice.class))).thenReturn(Mono.just(2000L));
+        when(couponService.calculatePriceCoupon(any(CouponCalculatePrice.class))).thenReturn(Mono.just(2000L));
         when(paymentService.payment(any(OrderPayment.class))).thenReturn(Mono.error(new PaymentFailException("test")));
         when(orderRepository.save(any(Order.class))).thenReturn(order);
 

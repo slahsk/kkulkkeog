@@ -17,7 +17,7 @@ public interface CouponService {
 
     Flux<Coupon> validationOrderCoupon(List<CouponValidation> couponValidations);
 
-    Mono<Long> calculatePrice(CouponCalculatePrice couponCalculatePrice);
+    Mono<Long> calculatePriceCoupon(CouponCalculatePrice couponCalculatePrice);
 
     Mono<Coupon> saveCoupon(Coupon coupon);
 

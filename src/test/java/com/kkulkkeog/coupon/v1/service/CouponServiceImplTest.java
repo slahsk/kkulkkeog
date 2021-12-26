@@ -79,7 +79,7 @@ class CouponServiceImplTest {
 
         when(couponRepository.findAllById(anyList())).thenReturn(List.of(coupon1, coupon2));
 
-        Mono<Long> result = couponService.calculatePrice(couponCalculatePrice);
+        Mono<Long> result = couponService.calculatePriceCoupon(couponCalculatePrice);
 
         StepVerifier.create(result)
                 .consumeNextWith(aLong -> {

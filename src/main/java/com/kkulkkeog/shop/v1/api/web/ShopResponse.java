@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 public class ShopResponse {
-
-    private long shopNo;
+    private Long shopNo;
 
     private String shopName;
 
@@ -24,6 +23,8 @@ public class ShopResponse {
     private LocalDateTime openTime;
 
     private LocalDateTime closeTime;
+
+    private Integer businessNumber;
 
     private LocalDateTime created;
 

@@ -32,6 +32,8 @@ public class Shop {
 
     private LocalDateTime closeTime;
 
+    private Integer businessNumber;
+
     @CreatedDate
     private LocalDateTime created;
 

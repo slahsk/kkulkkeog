@@ -1,5 +1,6 @@
 package com.kkulkkeog.shop.v1.service;
 
+import com.kkulkkeog.shop.v1.common.exception.ShopDuplicateException;
 import com.kkulkkeog.shop.v1.common.exception.ShopNotFoundException;
 import com.kkulkkeog.shop.v1.domain.Shop;
 import com.kkulkkeog.shop.v1.repository.ShopRepository;
@@ -8,18 +9,19 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ShopServiceImpl implements ShopService{
     private final ShopRepository shopRepository;
 
     @Override
     public Mono<Shop> findShop(long shopNo) {
          return Mono.just(shopNo)
-                 .publishOn(Schedulers.boundedElastic())
                  .map(shopRepository::findById)
                  .map(shop -> shop.orElseThrow(() -> new ShopNotFoundException(shopNo)));
     }
@@ -33,7 +35,13 @@ public class ShopServiceImpl implements ShopService{
     public Mono<Shop> saveShop(Shop shop) {
         return Mono.just(shop)
                 .publishOn(Schedulers.boundedElastic())
-                .map(shopRepository::save);
+                .map(s -> {
+                    if( shopRepository.findByBusinessNumber( s.getBusinessNumber()).isPresent()){
+                        throw new ShopDuplicateException(s.getBusinessNumber());
+                    }
+
+                    return shopRepository.save(s);
+                });
     }
 
     @Override
@@ -46,7 +54,6 @@ public class ShopServiceImpl implements ShopService{
     @Override
     public Mono<Shop> updateShop(Shop shop) {
        return Mono.just(shop)
-               .publishOn(Schedulers.boundedElastic())
                .map(shopRepository::save);
     }
 }

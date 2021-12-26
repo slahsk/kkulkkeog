@@ -78,7 +78,7 @@ public class CouponServiceImpl implements CouponService {
 
 
     @Override
-    public Mono<Long> calculatePrice(CouponCalculatePrice couponCalculatePrice) {
+    public Mono<Long> calculatePriceCoupon(CouponCalculatePrice couponCalculatePrice) {
         return Mono.just(couponCalculatePrice)
                 .publishOn(Schedulers.boundedElastic())
                 .map( o -> {

@@ -2,24 +2,23 @@ package com.kkulkkeog.order.v1.service;
 
 import com.kkulkkeog.coupon.v1.api.message.CouponCalculatePrice;
 import com.kkulkkeog.coupon.v1.api.message.CouponValidation;
+import com.kkulkkeog.coupon.v1.common.exception.CouponValidationException;
 import com.kkulkkeog.coupon.v1.service.CouponService;
 import com.kkulkkeog.menu.v1.api.message.MenuValidation;
-import com.kkulkkeog.menu.v1.service.MenuService;
-import com.kkulkkeog.coupon.v1.common.exception.CouponValidationException;
 import com.kkulkkeog.menu.v1.common.exception.MenuValidationException;
+import com.kkulkkeog.menu.v1.service.MenuService;
+import com.kkulkkeog.order.v1.api.OrderState;
 import com.kkulkkeog.order.v1.common.exception.OrderNotFoundException;
 import com.kkulkkeog.order.v1.domain.Order;
-import com.kkulkkeog.order.v1.api.OrderState;
 import com.kkulkkeog.order.v1.domain.mapper.OrderMapper;
 import com.kkulkkeog.order.v1.repository.OrderRepository;
-import com.kkulkkeog.payment.v1.common.exception.PaymentFailException;
 import com.kkulkkeog.payment.v1.api.message.OrderPayment;
+import com.kkulkkeog.payment.v1.common.exception.PaymentFailException;
 import com.kkulkkeog.payment.v1.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import java.util.List;
 
@@ -43,14 +42,14 @@ public class OrderServiceImpl implements OrderService{
     public Mono<Order> saveOrder(final Order order) {
 
         return Mono.just(order)
-                .flatMap(orderMono -> {
-                    Order data = orderRepository.save(orderMono);
-                    List<MenuValidation> menuValidations = OrderMapper.INSTANCE.toMenuValidations(orderMono.getOrderMenus());
+                .map(orderRepository::save)
+                .flatMap(data -> {
+                    List<MenuValidation> menuValidations = OrderMapper.INSTANCE.toMenuValidations(data.getOrderMenus());
 
                     return menuService.validationOrderMenu(menuValidations)
                             .flatMap( b -> {
                                 data.setOrderState(OrderState.MENU_VALIDATION_SUCCESS);
-                                List<CouponValidation> couponValidations = OrderMapper.INSTANCE.toCouponValidations(orderMono.getOrderCoupons());
+                                List<CouponValidation> couponValidations = OrderMapper.INSTANCE.toCouponValidations(data.getOrderCoupons());
                                 return couponService.validationOrderCoupon(couponValidations)
                                         .doOnNext(coupon -> {
                                             log.debug("COUPON_VALIDATION_SUCCESS");
@@ -59,9 +58,9 @@ public class OrderServiceImpl implements OrderService{
                                         .then();
                             })
                             .then(Mono.defer(() -> {
-                                CouponCalculatePrice couponCalculatePrice = OrderMapper.INSTANCE.toCouponCalculatePrice(orderMono);
+                                CouponCalculatePrice couponCalculatePrice = OrderMapper.INSTANCE.toCouponCalculatePrice(data);
 
-                                return couponService.calculatePrice(couponCalculatePrice)
+                                return couponService.calculatePriceCoupon(couponCalculatePrice)
                                         .doOnNext(aLong -> {
                                             log.debug("COUPON_CALCULATE_SUCCESS");
 
@@ -81,14 +80,20 @@ public class OrderServiceImpl implements OrderService{
                                         .then(Mono.just(data));
                             }))
                             .doOnError(MenuValidationException.class, e -> {
+                                log.error("MenuValidationException",e);
+
                                 data.setOrderState(OrderState.MENU_VALIDATION_FAIL);
                                 orderRepository.save(data);
                             })
                             .doOnError(CouponValidationException.class, e -> {
+                                log.error("CouponValidationException",e);
+
                                 data.setOrderState(OrderState.COUPON_VALIDATION_FAIL);
                                 orderRepository.save(data);
                             })
                             .doOnError(PaymentFailException.class, e -> {
+                                log.error("PaymentFailException",e);
+
                                 data.setOrderState(OrderState.PAYMENT_FAIL);
                                 orderRepository.save(data);
                             });

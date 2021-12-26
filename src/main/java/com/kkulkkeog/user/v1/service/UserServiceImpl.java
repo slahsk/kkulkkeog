@@ -1,11 +1,9 @@
 package com.kkulkkeog.user.v1.service;
 
-import com.kkulkkeog.review.v1.common.exception.ReviewNotFoundException;
-import com.kkulkkeog.user.v1.domain.User;
-import com.kkulkkeog.user.v1.repository.UserRepository;
 import com.kkulkkeog.user.v1.common.exception.UserDuplicateException;
 import com.kkulkkeog.user.v1.common.exception.UserNotFoundException;
-
+import com.kkulkkeog.user.v1.domain.User;
+import com.kkulkkeog.user.v1.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
@@ -16,7 +14,6 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -49,15 +46,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<Void> deleteUser(long no) {
         return findUser(no)
-        .doOnNext( member -> {
-            member.setDeleted(true);
-        }).then();
+        .doOnNext( member -> member.setDeleted(true)).then();
     }
 
     @Override
     public Mono<User> findUser(long no) {
        return Mono.just(no)
-                .publishOn(Schedulers.boundedElastic())
                 .map(memberRepository::findById)
                 .map(user -> user.orElseThrow( () -> new UserNotFoundException(no)));
     }
@@ -65,7 +59,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<User> findUserByEmail(String email) {
         return Mono.just(email)
-                .publishOn(Schedulers.boundedElastic())
                 .map(memberRepository::findByEmail)
                 .map(user ->{
                     log.debug("findUserByEmail: {}", user);

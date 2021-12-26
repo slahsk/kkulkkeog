@@ -5,6 +5,7 @@ import com.kkulkkeog.coupon.v1.domain.CouponUser;
 import com.kkulkkeog.coupon.v1.repository.CouponUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
@@ -32,7 +33,7 @@ public class CouponUserServiceImpl implements CouponUserService {
     }
 
     @Override
-    public Flux<CouponUser> findCouponUser(CouponUser couponUser) {
-        return null;
+    public Flux<CouponUser> findCouponUser(Example<CouponUser> example) {
+        return Flux.fromIterable(couponUserRepository.findAll(example));
     }
 }
