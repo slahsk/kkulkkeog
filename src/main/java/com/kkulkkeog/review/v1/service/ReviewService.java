@@ -13,5 +13,7 @@ public interface ReviewService {
 
     Mono<Review> saveReview(Review review);
 
+    Mono<Review> saveReviewComment(long shopNo, long reviewNo, String reviewComment);
+
     Mono<Void> deleteReview(long reviewNo);
 }

@@ -26,6 +26,8 @@ public class Review {
 
     private Long userNo;
 
+    private Long orderNo;
+
     private Long fileNo;
 
     private String userName;

@@ -1,5 +1,6 @@
 package com.kkulkkeog.review.v1.service;
 
+import com.kkulkkeog.review.v1.common.exception.ReviewIllegalArgumentException;
 import com.kkulkkeog.review.v1.common.exception.ReviewNotFoundException;
 import com.kkulkkeog.review.v1.domain.Review;
 import com.kkulkkeog.review.v1.repository.ReviewRepository;
@@ -10,6 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +38,31 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public Mono<Review> saveReview(Review review) {
         return Mono.just(review)
-                .map(reviewRepository::save);
+                .publishOn(Schedulers.boundedElastic())
+                .map(r -> {
+                    Optional<Review> data = reviewRepository.findByOrderNoAndUserNo(r.getOrderNo(), r.getUserNo());
+
+                    if( data.isPresent() && Boolean.FALSE.equals(data.get().getDeleted())){
+                        throw new ReviewIllegalArgumentException(r.getOrderNo(),  r.getUserNo());
+                    }
+
+                   return reviewRepository.save(r);
+                });
+    }
+
+    @Override
+    public Mono<Review> saveReviewComment(long shopNo, long reviewNo, String reviewComment) {
+       return Mono.just(reviewNo)
+                .flatMap(this::findReview)
+                .flatMap(review -> {
+                    if(shopNo != review.getShopNo()){
+                        return Mono.error(new ReviewIllegalArgumentException(shopNo));
+                    }
+
+                    review.setReviewComment(reviewComment);
+                    review.setReviewCommentTime(LocalDateTime.now());
+                   return this.saveReview(review);
+                });
     }
 
     @Override

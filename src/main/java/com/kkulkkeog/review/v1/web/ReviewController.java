@@ -3,6 +3,7 @@ package com.kkulkkeog.review.v1.web;
 import com.kkulkkeog.common.Constant;
 import com.kkulkkeog.review.v1.api.web.GetReviewRequest;
 import com.kkulkkeog.review.v1.api.web.PostReviewRequest;
+import com.kkulkkeog.review.v1.api.web.PutReviewCommentRequest;
 import com.kkulkkeog.review.v1.api.web.ReviewResponse;
 import com.kkulkkeog.review.v1.domain.Review;
 import com.kkulkkeog.review.v1.domain.mapper.ReviewMapper;
@@ -12,7 +13,6 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -39,10 +39,19 @@ public class ReviewController {
     }
 
     @PostMapping("/reviews")
-    public Mono<ReviewResponse> postReview(PostReviewRequest postCouponRequest){
+    public Mono<ReviewResponse> postReview(@RequestBody PostReviewRequest postCouponRequest){
         Review review = ReviewMapper.INSTANCE.toReview(postCouponRequest);
 
         Mono<Review> saveReview = reviewService.saveReview(review);
+
+        return saveReview.map(ReviewMapper.INSTANCE::toReviewResponse);
+    }
+
+    @PutMapping("/reviews/{reviewNo}/comment")
+    public Mono<ReviewResponse> putReviewComment(@PathVariable Long reviewNo,@RequestBody PutReviewCommentRequest request){
+
+        //TODO JWT를 통해서 로그인한 shopNo 가져오기
+        Mono<Review> saveReview = reviewService.saveReviewComment(0,reviewNo,request.getReviewComment());
 
         return saveReview.map(ReviewMapper.INSTANCE::toReviewResponse);
     }

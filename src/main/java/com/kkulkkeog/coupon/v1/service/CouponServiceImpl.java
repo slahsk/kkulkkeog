@@ -6,6 +6,7 @@ import com.kkulkkeog.coupon.v1.api.message.CouponCalculatePrice;
 import com.kkulkkeog.coupon.v1.api.message.CouponValidation;
 import com.kkulkkeog.coupon.v1.domain.Coupon;
 import com.kkulkkeog.coupon.v1.repository.CouponRepository;
+import com.kkulkkeog.coupon.v1.repository.CouponUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class CouponServiceImpl implements CouponService {
     private final CouponRepository couponRepository;
+    private final CouponUserRepository couponUserRepository;
 
     @Override
     public Mono<Page<Coupon>> findAllCoupon(Example<Coupon> example, Pageable pageable){
@@ -62,6 +64,7 @@ public class CouponServiceImpl implements CouponService {
                             .stream()
                             .map(CouponValidation::getCouponNo)
                             .collect(Collectors.toList());
+
 
                     List<Coupon> coupons = couponRepository.findAllById(couponNos);
                     log.debug("validationOrderCoupon : {}",coupons);
