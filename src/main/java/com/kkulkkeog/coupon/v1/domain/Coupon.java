@@ -9,7 +9,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "TB_COUPON")
@@ -54,11 +53,11 @@ public class Coupon{
 //    @OneToMany(mappedBy = "coupon", fetch = FetchType.LAZY)
 //    private List<CouponUser> couponUsers;
 
-    public boolean isCouponAvailable(){
+    public boolean isAvailableCoupon(){
         LocalDateTime now = LocalDateTime.now();
         boolean after = now.isAfter(startDate);
         boolean before = now.isBefore(endDate);
 
-        return after && before && !deleted;
+        return after && before && Boolean.FALSE.equals(deleted);
     }
 }

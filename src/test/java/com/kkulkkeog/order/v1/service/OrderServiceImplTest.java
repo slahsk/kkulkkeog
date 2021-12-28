@@ -1,6 +1,6 @@
 package com.kkulkkeog.order.v1.service;
 
-import com.kkulkkeog.coupon.v1.common.exception.CouponValidationException;
+import com.kkulkkeog.coupon.v1.common.exception.CouponNotAvailableException;
 import com.kkulkkeog.coupon.v1.api.message.CouponCalculatePrice;
 import com.kkulkkeog.coupon.v1.domain.Coupon;
 import com.kkulkkeog.coupon.v1.service.CouponService;
@@ -117,14 +117,14 @@ class OrderServiceImplTest {
     @DisplayName("주문 생성 - 실패(CouponValidationException)")
     void testSaveOrderCouponValidationException(){
         when(menuService.validationOrderMenu(anyList())).thenReturn(Mono.just(true));
-        when(couponService.validationOrderCoupon(anyList())).thenReturn(Flux.error(new CouponValidationException("test")));
+        when(couponService.validationOrderCoupon(anyList())).thenReturn(Flux.error(new CouponNotAvailableException(1)));
 
         when(orderRepository.save(any(Order.class))).thenReturn(order);
 
         Mono<Order> orderMono = orderService.saveOrder(order);
 
         StepVerifier.create(orderMono)
-                .expectError(CouponValidationException.class)
+                .expectError(CouponNotAvailableException.class)
                 .verify();
 
         verify(orderRepository, times(2)).save(any(Order.class));

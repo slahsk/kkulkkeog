@@ -4,6 +4,7 @@ package com.kkulkkeog.coupon.v1.service;
 import com.kkulkkeog.coupon.v1.common.exception.CouponNotFoundException;
 import com.kkulkkeog.coupon.v1.api.message.CouponCalculatePrice;
 import com.kkulkkeog.coupon.v1.api.message.CouponValidation;
+import com.kkulkkeog.coupon.v1.common.exception.CouponNotAvailableException;
 import com.kkulkkeog.coupon.v1.domain.Coupon;
 import com.kkulkkeog.coupon.v1.repository.CouponRepository;
 import com.kkulkkeog.coupon.v1.repository.CouponUserRepository;
@@ -19,8 +20,6 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,17 +64,17 @@ public class CouponServiceImpl implements CouponService {
                             .map(CouponValidation::getCouponNo)
                             .collect(Collectors.toList());
 
-
                     List<Coupon> coupons = couponRepository.findAllById(couponNos);
-                    log.debug("validationOrderCoupon : {}",coupons);
-                    //TODO 쿠폰 검사
 
+                    return Flux.fromIterable(coupons)
+                            .flatMap(coupon -> {
+                                if(Boolean.FALSE.equals(coupon.isAvailableCoupon())){
+                                    return Flux.error(new CouponNotAvailableException(coupon.getCouponNo()));
+                                }
 
-//                                        if( i != couponValidations.size()){
-//                                            throw new CouponValidationException(couponValidations.toString());
-//                                        }
+                                return Mono.just(coupon);
+                            });
 
-                    return Flux.fromIterable(coupons);
                 });
     }
 

@@ -24,7 +24,7 @@ public class CouponUserServiceImpl implements CouponUserService {
        return Mono.just(couponUser)
                .flatMap( c -> couponService.findCoupon(c.getCouponNo()))
                .doOnNext(coupon -> {
-                   if(!coupon.isCouponAvailable()){
+                   if(!coupon.isAvailableCoupon()){
                        throw new CouponIssuanceFailException(couponUser.getCouponNo(), couponUser.getUserNo());
                    }
                })

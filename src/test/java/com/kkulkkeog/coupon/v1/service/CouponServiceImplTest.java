@@ -2,9 +2,11 @@ package com.kkulkkeog.coupon.v1.service;
 
 import com.kkulkkeog.coupon.v1.api.message.CouponCalculatePrice;
 import com.kkulkkeog.coupon.v1.api.message.CouponValidation;
+import com.kkulkkeog.coupon.v1.common.exception.CouponNotAvailableException;
 import com.kkulkkeog.coupon.v1.domain.Coupon;
 import com.kkulkkeog.coupon.v1.repository.CouponRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +17,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyList;
@@ -29,6 +32,19 @@ class CouponServiceImplTest {
     @Mock
     CouponRepository couponRepository;
 
+    List<Coupon> data;
+
+
+    @BeforeEach
+    void setup(){
+        LocalDateTime startDate = LocalDateTime.now().minusWeeks(1);
+        LocalDateTime endDate = LocalDateTime.now().plusWeeks(1);
+
+        Coupon coupon1 = Coupon.builder().couponNo(1L).startDate(startDate).endDate(endDate).deleted(false).shopNo(11L).build();
+        Coupon coupon2 = Coupon.builder().couponNo(2L).startDate(startDate).endDate(endDate).deleted(false).shopNo(11L).build();
+
+        data = List.of(coupon1, coupon2);
+    }
 
     @Test
     @DisplayName("쿠폰 사용여부 검사 - 성공")
@@ -36,11 +52,8 @@ class CouponServiceImplTest {
         CouponValidation couponValidation1 = CouponValidation.builder().couponNo(1).memberNo(100).shopNo(11).build();
         CouponValidation couponValidation2 = CouponValidation.builder().couponNo(2).memberNo(100).shopNo(11).build();
 
-        Coupon coupon1 = Coupon.builder().couponNo(1L).shopNo(11L).build();
-        Coupon coupon2 = Coupon.builder().couponNo(2L).shopNo(11L).build();
 
-
-        when(couponRepository.findAllById(anyList())).thenReturn(List.of(coupon1, coupon2));
+        when(couponRepository.findAllById(anyList())).thenReturn(data);
 
         Flux<Coupon> couponFlux = couponService.validationOrderCoupon(List.of(couponValidation1, couponValidation2));
 
@@ -49,24 +62,22 @@ class CouponServiceImplTest {
                 .verifyComplete();
     }
 
-//    @Test
-//    @DisplayName("쿠폰 사용여부 검사 실패(CouponValidationException)")
-//    void testValidationOrderCouponCouponValidationException(){
-//        CouponValidation couponValidation1 = CouponValidation.builder().couponNo(1).memberNo(100).shopNo(11).build();
-//        CouponValidation couponValidation2 = CouponValidation.builder().couponNo(2).memberNo(100).shopNo(11).build();
-//
-//        Coupon coupon1 = Coupon.builder().couponNo(1L).shopNo(11).build();
-//        Coupon coupon2 = Coupon.builder().couponNo(2L).shopNo(11).build();
-//
-//
-//        when(couponRepository.findAllById(anyList())).thenReturn(List.of(coupon1, coupon2));
-//
-//        Mono<Boolean> orderValidation = couponService.validationOrderCoupon(List.of(couponValidation1, couponValidation2));
-//
-//        StepVerifier.create(orderValidation)
-//                .expectError(CouponValidationException.class)
-//                .verify();
-//    }
+    @Test
+    @DisplayName("쿠폰 사용여부 검사 실패(CouponNotAvailableException)")
+    void testValidationOrderCouponCouponNotAvailableException(){
+        CouponValidation couponValidation1 = CouponValidation.builder().couponNo(1).memberNo(100).shopNo(11).build();
+        CouponValidation couponValidation2 = CouponValidation.builder().couponNo(2).memberNo(100).shopNo(11).build();
+
+        data.get(0).setEndDate(LocalDateTime.now().minusDays(1));
+
+        when(couponRepository.findAllById(anyList())).thenReturn(data);
+
+        Flux<Coupon> couponFlux = couponService.validationOrderCoupon(List.of(couponValidation1, couponValidation2));
+
+        StepVerifier.create(couponFlux)
+                .expectError(CouponNotAvailableException.class)
+                .verify();
+    }
 
     @Test
     @DisplayName("쿠폰 계산")

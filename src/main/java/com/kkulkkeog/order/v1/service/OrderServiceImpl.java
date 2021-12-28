@@ -2,7 +2,7 @@ package com.kkulkkeog.order.v1.service;
 
 import com.kkulkkeog.coupon.v1.api.message.CouponCalculatePrice;
 import com.kkulkkeog.coupon.v1.api.message.CouponValidation;
-import com.kkulkkeog.coupon.v1.common.exception.CouponValidationException;
+import com.kkulkkeog.coupon.v1.common.exception.CouponNotAvailableException;
 import com.kkulkkeog.coupon.v1.service.CouponService;
 import com.kkulkkeog.menu.v1.api.message.MenuValidation;
 import com.kkulkkeog.menu.v1.common.exception.MenuValidationException;
@@ -85,7 +85,7 @@ public class OrderServiceImpl implements OrderService{
                                 data.setOrderState(OrderState.MENU_VALIDATION_FAIL);
                                 orderRepository.save(data);
                             })
-                            .doOnError(CouponValidationException.class, e -> {
+                            .doOnError(CouponNotAvailableException.class, e -> {
                                 log.error("CouponValidationException",e);
 
                                 data.setOrderState(OrderState.COUPON_VALIDATION_FAIL);
