@@ -5,6 +5,7 @@ import com.kkulkkeog.coupon.v1.api.message.CouponCalculatePrice;
 import com.kkulkkeog.coupon.v1.domain.Coupon;
 import com.kkulkkeog.coupon.v1.service.CouponService;
 import com.kkulkkeog.menu.v1.common.exception.MenuValidationException;
+import com.kkulkkeog.menu.v1.domain.Menu;
 import com.kkulkkeog.menu.v1.service.MenuService;
 import com.kkulkkeog.order.v1.api.message.PaymentType;
 import com.kkulkkeog.order.v1.domain.Order;
@@ -81,7 +82,7 @@ class OrderServiceImplTest {
     @Test
     @DisplayName("주문 생성 - 성공")
     void testSaveOrderSuccess(){
-        when(menuService.validationOrderMenu(anyList())).thenReturn(Mono.just(true));
+        when(menuService.validationOrderMenu(anyList())).thenReturn(Flux.just(new Menu()));
         when(couponService.validationOrderCoupon(anyList())).thenReturn(Flux.just(new Coupon()));
         when(couponService.calculatePriceCoupon(any(CouponCalculatePrice.class))).thenReturn(Mono.just(2000L));
         when(paymentService.payment(any(OrderPayment.class))).thenReturn(Mono.just(true));
@@ -101,7 +102,7 @@ class OrderServiceImplTest {
     @Test
     @DisplayName("주문 생성 - 실패(MenuValidationException)")
     void testSaveOrderMenuValidationException(){
-        when(menuService.validationOrderMenu(anyList())).thenReturn(Mono.error(new MenuValidationException("test")));
+        when(menuService.validationOrderMenu(anyList())).thenReturn(Flux.error(new MenuValidationException("test")));
         when(orderRepository.save(any(Order.class))).thenReturn(order);
 
         Mono<Order> orderMono = orderService.saveOrder(order);
@@ -116,7 +117,7 @@ class OrderServiceImplTest {
     @Test
     @DisplayName("주문 생성 - 실패(CouponValidationException)")
     void testSaveOrderCouponValidationException(){
-        when(menuService.validationOrderMenu(anyList())).thenReturn(Mono.just(true));
+        when(menuService.validationOrderMenu(anyList())).thenReturn(Flux.just(new Menu()));
         when(couponService.validationOrderCoupon(anyList())).thenReturn(Flux.error(new CouponNotAvailableException(1)));
 
         when(orderRepository.save(any(Order.class))).thenReturn(order);
@@ -133,7 +134,7 @@ class OrderServiceImplTest {
     @Test
     @DisplayName("주문 생성 - 실패(PaymentFailException)")
     void testSaveOrderPaymentFailException(){
-        when(menuService.validationOrderMenu(anyList())).thenReturn(Mono.just(true));
+        when(menuService.validationOrderMenu(anyList())).thenReturn(Flux.just(new Menu()));
         when(couponService.validationOrderCoupon(anyList())).thenReturn(Flux.just(new Coupon()));
         when(couponService.calculatePriceCoupon(any(CouponCalculatePrice.class))).thenReturn(Mono.just(2000L));
         when(paymentService.payment(any(OrderPayment.class))).thenReturn(Mono.error(new PaymentFailException("test")));

@@ -48,4 +48,8 @@ public class Menu {
 
     private Boolean deleted;
 
+    public boolean validation(long shopNo, int price){
+        return this.shopNo == shopNo && this.price == price;
+    }
+
 }

@@ -2,6 +2,7 @@ package com.kkulkkeog.menu.v1.service;
 
 import com.kkulkkeog.menu.v1.common.exception.MenuValidationException;
 import com.kkulkkeog.menu.v1.api.message.MenuValidation;
+import com.kkulkkeog.menu.v1.domain.Menu;
 import com.kkulkkeog.menu.v1.repository.MenuGroupRepository;
 import com.kkulkkeog.menu.v1.repository.MenuRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -15,8 +16,7 @@ import reactor.test.StepVerifier;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 
@@ -42,20 +42,20 @@ class MenuServiceImplTest {
 
         List<MenuValidation> menuValidations = List.of(menuValidation, menuValidation2);
 
-        Optional<Integer> value = Optional.of(1);
-        Optional<Integer> value2 = Optional.of(1);
-        when(menuRepository.countByShopNoAndMenuNoAndPrice(anyLong(), anyLong(), anyInt())).thenReturn(value, value2);
+        Menu value = Menu.builder().menuNo(1L).shopNo(100L).price(2000).build();
+        Menu value2 = Menu.builder().menuNo(2L).shopNo(100L).price(4000).build();
+
+        when(menuRepository.findAllById(anyList())).thenReturn(List.of(value, value2));
 
 
 
-        StepVerifier.create(menuService.validationOrderMenu(menuValidations).log())
-                .expectNext(true)
+        StepVerifier.create(menuService.validationOrderMenu(menuValidations))
+                .expectNextCount(2)
                 .expectComplete()
                 .log()
                 .verify();
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     @DisplayName("메뉴 검사 - 실패(MenuValidationException)")
     void testOrderValidationMenuValidationException(){
@@ -64,10 +64,10 @@ class MenuServiceImplTest {
 
         List<MenuValidation> menuValidations = List.of(menuValidation, menuValidation2);
 
-        Optional<Integer> value = Optional.of(1);
-        Optional<Integer> value2 = Optional.of(0);
-        when(menuRepository.countByShopNoAndMenuNoAndPrice(anyLong(), anyLong(), anyInt())).thenReturn(value, value2);
+        Menu value = Menu.builder().menuNo(1L).shopNo(100L).price(3000).build();
+        Menu value2 = Menu.builder().menuNo(2L).shopNo(100L).price(4000).build();
 
+        when(menuRepository.findAllById(anyList())).thenReturn(List.of(value, value2));
 
 
         StepVerifier.create(menuService.validationOrderMenu(menuValidations))

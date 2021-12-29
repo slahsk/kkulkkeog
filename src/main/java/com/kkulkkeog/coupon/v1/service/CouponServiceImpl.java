@@ -1,13 +1,12 @@
 package com.kkulkkeog.coupon.v1.service;
 
 
-import com.kkulkkeog.coupon.v1.common.exception.CouponNotFoundException;
 import com.kkulkkeog.coupon.v1.api.message.CouponCalculatePrice;
 import com.kkulkkeog.coupon.v1.api.message.CouponValidation;
 import com.kkulkkeog.coupon.v1.common.exception.CouponNotAvailableException;
+import com.kkulkkeog.coupon.v1.common.exception.CouponNotFoundException;
 import com.kkulkkeog.coupon.v1.domain.Coupon;
 import com.kkulkkeog.coupon.v1.repository.CouponRepository;
-import com.kkulkkeog.coupon.v1.repository.CouponUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
@@ -20,7 +19,6 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +26,6 @@ import java.util.stream.Collectors;
 @Transactional
 public class CouponServiceImpl implements CouponService {
     private final CouponRepository couponRepository;
-    private final CouponUserRepository couponUserRepository;
 
     @Override
     public Mono<Page<Coupon>> findAllCoupon(Example<Coupon> example, Pageable pageable){
@@ -58,24 +55,20 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public Flux<Coupon> validationOrderCoupon(List<CouponValidation> couponValidations) {
         return Flux.fromIterable(couponValidations)
-                .as( couponValidation -> {
-                    List<Long> couponNos = couponValidations
-                            .stream()
-                            .map(CouponValidation::getCouponNo)
-                            .collect(Collectors.toList());
+                .as( coupons -> coupons
+                        .map(CouponValidation::getCouponNo)
+                        .collectList()
+                        .flatMapMany(longs ->
+                                Flux.fromIterable(couponRepository.findAllById(longs))
+                                .flatMap(coupon -> {
+                                    if(Boolean.FALSE.equals(coupon.isAvailableCoupon())){
+                                        return Flux.error(new CouponNotAvailableException(coupon.getCouponNo()));
+                                    }
 
-                    List<Coupon> coupons = couponRepository.findAllById(couponNos);
-
-                    return Flux.fromIterable(coupons)
-                            .flatMap(coupon -> {
-                                if(Boolean.FALSE.equals(coupon.isAvailableCoupon())){
-                                    return Flux.error(new CouponNotAvailableException(coupon.getCouponNo()));
+                                    return Mono.just(coupon);
                                 }
-
-                                return Mono.just(coupon);
-                            });
-
-                });
+                        ))
+                );
     }
 
 

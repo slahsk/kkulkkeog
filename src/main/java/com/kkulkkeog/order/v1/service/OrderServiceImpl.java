@@ -47,16 +47,17 @@ public class OrderServiceImpl implements OrderService{
                     List<MenuValidation> menuValidations = OrderMapper.INSTANCE.toMenuValidations(data.getOrderMenus());
 
                     return menuService.validationOrderMenu(menuValidations)
-                            .flatMap( b -> {
+                            .then(Mono.defer(() -> {
                                 data.setOrderState(OrderState.MENU_VALIDATION_SUCCESS);
                                 List<CouponValidation> couponValidations = OrderMapper.INSTANCE.toCouponValidations(data.getOrderCoupons());
+
                                 return couponService.validationOrderCoupon(couponValidations)
                                         .doOnNext(coupon -> {
                                             log.debug("COUPON_VALIDATION_SUCCESS");
                                             data.setOrderState(OrderState.COUPON_VALIDATION_SUCCESS);
                                         })
                                         .then();
-                            })
+                            }))
                             .then(Mono.defer(() -> {
                                 CouponCalculatePrice couponCalculatePrice = OrderMapper.INSTANCE.toCouponCalculatePrice(data);
 

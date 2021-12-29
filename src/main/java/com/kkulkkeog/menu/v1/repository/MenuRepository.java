@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface MenuRepository extends JpaRepository<Menu, Long> {
 
-    Optional<Integer> countByShopNoAndMenuNoAndPrice(long shopNo,long menuNo, int price);
+    Optional<Menu> findByShopNoAndMenuNoAndPrice(long shopNo,long menuNo, int price);
 }
