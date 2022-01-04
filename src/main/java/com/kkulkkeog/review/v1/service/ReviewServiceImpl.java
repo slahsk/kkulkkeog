@@ -22,7 +22,6 @@ import java.util.Optional;
 public class ReviewServiceImpl implements ReviewService{
     private final ReviewRepository reviewRepository;
 
-
     @Override
     public Mono<Page<Review>> findAllReviews(Example<Review> example, Pageable pageable) {
         return Mono.just(reviewRepository.findAll(example, pageable));
@@ -52,8 +51,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public Mono<Review> saveReviewComment(long shopNo, long reviewNo, String reviewComment) {
-       return Mono.just(reviewNo)
-                .flatMap(this::findReview)
+       return findReview(reviewNo)
                 .flatMap(review -> {
                     if(shopNo != review.getShopNo()){
                         return Mono.error(new ReviewIllegalArgumentException(shopNo));
@@ -61,7 +59,7 @@ public class ReviewServiceImpl implements ReviewService{
 
                     review.setReviewComment(reviewComment);
                     review.setReviewCommentTime(LocalDateTime.now());
-                   return this.saveReview(review);
+                    return this.saveReview(review);
                 });
     }
 

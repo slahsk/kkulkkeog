@@ -1,5 +1,6 @@
 package com.kkulkkeog.coupon.v1.service;
 
+import com.kkulkkeog.coupon.v1.common.exception.CouponDuplicationException;
 import com.kkulkkeog.coupon.v1.common.exception.CouponIssuanceFailException;
 import com.kkulkkeog.coupon.v1.domain.CouponUser;
 import com.kkulkkeog.coupon.v1.repository.CouponUserRepository;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,11 +25,19 @@ public class CouponUserServiceImpl implements CouponUserService {
 
     @Override
     public Mono<CouponUser> saveCouponUser(CouponUser couponUser) {
-       return Mono.just(couponUser)
-               .flatMap( c -> couponService.findCoupon(c.getCouponNo()))
+       return couponService.findCoupon(couponUser.getCouponNo())
+               .publishOn(Schedulers.boundedElastic())
                .doOnNext(coupon -> {
                    if(!coupon.isAvailableCoupon()){
                        throw new CouponIssuanceFailException(couponUser.getCouponNo(), couponUser.getUserNo());
+                   }
+
+                   if(Boolean.FALSE.equals(coupon.getDuplication())){
+                       Optional<CouponUser> optionalCouponUser = couponUserRepository.findByCouponNo(coupon.getCouponNo());
+
+                       if(optionalCouponUser.isPresent()){
+                           throw new CouponDuplicationException(couponUser.getCouponNo(), couponUser.getUserNo());
+                       }
                    }
                })
                .then(Mono.just(couponUser))

@@ -17,6 +17,9 @@ import com.kkulkkeog.payment.v1.common.exception.PaymentFailException;
 import com.kkulkkeog.payment.v1.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -112,5 +115,9 @@ public class OrderServiceImpl implements OrderService{
                 .then();
     }
 
+    @Override
+    public Mono<Page<Order>> findAllOrder(Example<Order> example, Pageable pageable) {
+        return Mono.just(orderRepository.findAll(example, pageable));
+    }
 
 }

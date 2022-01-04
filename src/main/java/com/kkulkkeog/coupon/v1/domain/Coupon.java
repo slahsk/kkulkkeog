@@ -50,6 +50,8 @@ public class Coupon{
 
     private Boolean deleted;
 
+    private Boolean duplication;
+
 //    @OneToMany(mappedBy = "coupon", fetch = FetchType.LAZY)
 //    private List<CouponUser> couponUsers;
 

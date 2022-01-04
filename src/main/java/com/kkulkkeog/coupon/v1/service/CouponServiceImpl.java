@@ -75,12 +75,11 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public Mono<Long> calculatePriceCoupon(CouponCalculatePrice couponCalculatePrice) {
         return Mono.just(couponCalculatePrice)
-                .publishOn(Schedulers.boundedElastic())
                 .map( o -> {
-                    long sum = couponRepository.findAllById(couponCalculatePrice.getCouponNos())
+                    long sum = couponRepository.findAllById(o.getCouponNos())
                             .stream()
                             .mapToLong(Coupon::getDiscountPrice).sum();
-                    return  couponCalculatePrice.getOrderTotalPrice() - sum;
+                    return  o.getOrderTotalPrice() - sum;
                 });
     }
 

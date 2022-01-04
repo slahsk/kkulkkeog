@@ -1,5 +1,6 @@
 package com.kkulkkeog.coupon.v1.service;
 
+import com.kkulkkeog.coupon.v1.common.exception.CouponDuplicationException;
 import com.kkulkkeog.coupon.v1.common.exception.CouponIssuanceFailException;
 import com.kkulkkeog.coupon.v1.domain.Coupon;
 import com.kkulkkeog.coupon.v1.domain.CouponUser;
@@ -16,9 +17,11 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CouponUserServiceImplTest {
@@ -48,9 +51,11 @@ class CouponUserServiceImplTest {
        LocalDateTime endDate = LocalDateTime.now().plusWeeks(1);
 
        coupon = Coupon.builder()
+                .couponNo(35L)
                 .startDate(startDate)
                 .endDate(endDate)
                 .deleted(false)
+                .duplication(true)
                 .build();
     }
 
@@ -86,6 +91,25 @@ class CouponUserServiceImplTest {
 
         StepVerifier.create(couponUserMono)
                 .expectError(CouponIssuanceFailException.class)
+                .verify();
+
+        verify(couponUserRepository, times(0)).save(any(CouponUser.class));
+    }
+
+
+    @Test
+    @DisplayName("사용자 쿠폰 발행 - 실패(중복 쿠폰발행 요청)")
+    void testSaveCouponUserCouponDuplicationException(){
+        coupon.setDuplication(false);
+
+        when(couponService.findCoupon(anyLong())).thenReturn(Mono.just(coupon));
+        when(couponUserRepository.findByCouponNo(anyLong())).thenReturn(Optional.of(new CouponUser()));
+
+        Mono<CouponUser> couponUserMono = couponUserService.saveCouponUser(couponUser);
+
+
+        StepVerifier.create(couponUserMono)
+                .expectError(CouponDuplicationException.class)
                 .verify();
 
         verify(couponUserRepository, times(0)).save(any(CouponUser.class));

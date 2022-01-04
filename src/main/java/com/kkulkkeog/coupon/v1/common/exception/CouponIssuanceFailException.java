@@ -2,6 +2,6 @@ package com.kkulkkeog.coupon.v1.common.exception;
 
 public class CouponIssuanceFailException extends CouponException{
     public CouponIssuanceFailException(long couponNo, long userNo) {
-        super(String.format("couponNo: %d, userNo: %d 쿠폰 발행 실패 했습니다.", couponNo, userNo));
+        super(String.format("couponNo: %d, userNo: %d 발행할 수 없는 쿠폰 입니다..", couponNo, userNo));
     }
 }

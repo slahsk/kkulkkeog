@@ -3,6 +3,7 @@ package com.kkulkkeog.order.v1.domain.mapper;
 import com.kkulkkeog.coupon.v1.api.message.CouponCalculatePrice;
 import com.kkulkkeog.coupon.v1.api.message.CouponValidation;
 import com.kkulkkeog.menu.v1.api.message.MenuValidation;
+import com.kkulkkeog.order.v1.api.web.GetOrderRequest;
 import com.kkulkkeog.order.v1.api.web.OrderResponse;
 import com.kkulkkeog.order.v1.api.web.PostOrderRequest;
 import com.kkulkkeog.order.v1.domain.Order;
@@ -22,6 +23,8 @@ public interface OrderMapper {
 
     Order toOrder(PostOrderRequest postOrderRequest);
 
+    Order toOrder(GetOrderRequest getOrderRequest);
+
     List<MenuValidation> toMenuValidations(List<OrderMenu> orderMenus);
 
     List<CouponValidation> toCouponValidations(List<OrderCoupon> orderCoupons);
@@ -38,4 +41,5 @@ public interface OrderMapper {
     }
 
     OrderResponse toOrderResponse(Order order);
+
 }
