@@ -5,12 +5,14 @@ import com.kkulkkeog.review.v1.api.web.PostReviewRequest;
 import com.kkulkkeog.review.v1.api.web.ReviewResponse;
 import com.kkulkkeog.review.v1.domain.Review;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface ReviewMapper {
     ReviewMapper INSTANCE = Mappers.getMapper(ReviewMapper.class);
 
+    @Mapping(target = "deleted", constant = "false")
     Review toReview(GetReviewRequest getReviewRequest);
 
     ReviewResponse toReviewResponse(Review review);

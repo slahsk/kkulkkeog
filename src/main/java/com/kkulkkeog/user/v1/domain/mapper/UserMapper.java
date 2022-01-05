@@ -6,6 +6,7 @@ import com.kkulkkeog.user.v1.api.web.UserResponse;
 import com.kkulkkeog.user.v1.api.web.PostUserRequest;
 import com.kkulkkeog.user.v1.domain.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
@@ -18,5 +19,6 @@ public interface UserMapper {
 
     UserResponse toUserResponse(User member);
 
+    @Mapping(target = "deleted", constant = "false")
     User toUser(GetUsersRequest getUsersRequest);
 }

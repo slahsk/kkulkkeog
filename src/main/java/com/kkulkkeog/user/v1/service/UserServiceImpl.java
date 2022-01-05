@@ -60,10 +60,8 @@ public class UserServiceImpl implements UserService {
     public Mono<User> findUserByEmail(String email) {
         return Mono.just(email)
                 .map(memberRepository::findByEmail)
-                .map(user ->{
-                    log.debug("findUserByEmail: {}", user);
-                   return user.orElseThrow( () -> new UserNotFoundException(email));
-                });
+                .doOnNext(user -> log.debug("findUserByEmail: {}", user))
+                .map(user -> user.orElseThrow( () -> new UserNotFoundException(email)));
     }
 
     @Override

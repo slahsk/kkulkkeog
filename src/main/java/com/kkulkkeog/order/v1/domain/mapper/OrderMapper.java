@@ -23,6 +23,7 @@ public interface OrderMapper {
 
     Order toOrder(PostOrderRequest postOrderRequest);
 
+    @Mapping(target = "deleted", constant = "false")
     Order toOrder(GetOrderRequest getOrderRequest);
 
     List<MenuValidation> toMenuValidations(List<OrderMenu> orderMenus);
